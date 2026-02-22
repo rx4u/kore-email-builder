@@ -1379,6 +1379,7 @@ export default function App() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [currentEmailId, setCurrentEmailId] = useState<string | undefined>(undefined);
   const [showDraftsPanel, setShowDraftsPanel] = useState(false);
+  const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile' | 'dark'>('desktop');
   const [sizeKB, setSizeKB] = useState(0);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
   const [saving, setSaving] = useState(false);
@@ -2829,13 +2830,40 @@ export default function App() {
                           width: '100%',
                           minHeight: '100%',
                           backgroundColor: '#f3f4f6',
-                          padding: previewFrame.padding,
                           boxSizing: 'border-box',
+                          display: 'flex',
+                          flexDirection: 'column',
                         }}
                       >
+                        {/* Preview mode toggles bar */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '12px 24px', borderBottom: '1px solid #e5e7eb', background: '#f9fafb', flexShrink: 0 }}>
+                          {(['desktop', 'mobile', 'dark'] as const).map((m) => (
+                            <button
+                              key={m}
+                              onClick={() => setPreviewMode(m)}
+                              style={{
+                                padding: '5px 14px',
+                                borderRadius: '6px',
+                                border: '1px solid',
+                                borderColor: previewMode === m ? '#18181b' : '#e5e7eb',
+                                background: previewMode === m ? '#18181b' : 'transparent',
+                                color: previewMode === m ? '#fff' : '#52525b',
+                                fontSize: '12px',
+                                fontWeight: 500,
+                                cursor: 'pointer',
+                                fontFamily: 'DM Mono, monospace',
+                                textTransform: 'capitalize',
+                                transition: 'all 0.15s',
+                              }}
+                            >
+                              {m === 'desktop' ? 'Desktop' : m === 'mobile' ? 'Mobile' : 'Dark'}
+                            </button>
+                          ))}
+                        </div>
+                        <div style={{ flex: 1, padding: previewFrame.padding, boxSizing: 'border-box' }}>
                         <div
                           style={{
-                            maxWidth: globalTheme.emailWidth,
+                            maxWidth: previewMode === 'mobile' ? '375px' : globalTheme.emailWidth,
                             margin: '0 auto',
                             width: '100%',
                             backgroundColor: '#ffffff',
@@ -2849,6 +2877,8 @@ export default function App() {
                             borderRadius: wrapperStyles.innerBorderRadius,
                             overflow: 'hidden',
                             boxSizing: 'border-box',
+                            ...(previewMode === 'dark' && { filter: 'invert(1) hue-rotate(180deg)' }),
+                            transition: 'max-width 0.3s, filter 0.2s',
                           }}
                         >
                           <EmailTemplate 
@@ -2926,6 +2956,7 @@ export default function App() {
                             />
                           )}
                           </EmailTemplate>
+                        </div>
                         </div>
                       </div>
                   )}
