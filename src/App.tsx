@@ -38,6 +38,7 @@ import { EmailSettingsButton, EmailSettingsPanel, type HeaderConfig, type Footer
 import { PropertiesPanel, type ContentBlock, type ContentBlockType } from "./components/PropertiesPanel";
 import { ThemeSettingsPanel } from "./components/ThemeSettingsPanel";
 import { CodeViewer } from "./components/CodeViewer";
+import { DraftsPanel } from "./components/DraftsPanel";
 import { generateEmailHTML } from "./lib/html-generator";
 import { iconSizes } from "./lib/design-tokens";
 import { toast } from "sonner@2.0.3";
@@ -1375,6 +1376,8 @@ export default function App() {
   const [pendingTemplate, setPendingTemplate] = useState<string | null>(null);
   const [showTemplateSwitchDialog, setShowTemplateSwitchDialog] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [currentEmailId, setCurrentEmailId] = useState<string | undefined>(undefined);
+  const [showDraftsPanel, setShowDraftsPanel] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -1618,6 +1621,22 @@ export default function App() {
   const cancelTemplateSwitch = () => {
     setPendingTemplate(null);
     setShowTemplateSwitchDialog(false);
+  };
+
+  const handleLoadDraft = (emailId: string, blocks: any[], subject: string) => {
+    if (emailId === '') {
+      // New email
+      setCurrentEmailId(undefined);
+      setEmailState(starterTemplates['release-notes']);
+      setCurrentTemplate('release-notes');
+      setHasUnsavedChanges(false);
+      return;
+    }
+    setCurrentEmailId(emailId);
+    if (blocks.length > 0) {
+      setEmailState(prev => ({ ...prev, content: blocks }));
+    }
+    setHasUnsavedChanges(false);
   };
 
   const handleCopyEmail = async () => {
@@ -2419,6 +2438,22 @@ export default function App() {
                 <p>Global theme settings</p>
               </TooltipContent>
             </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant={showDraftsPanel ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setShowDraftsPanel(!showDraftsPanel)}
+                  className="transition-all hover:scale-105 active:scale-95 gap-1.5"
+                >
+                  <Mail className="w-4 h-4" />
+                  Drafts
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Open drafts panel</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </header>
@@ -3116,6 +3151,15 @@ export default function App() {
           </tbody>
         </table>
       </div>
+
+      {/* Drafts Panel */}
+      {showDraftsPanel && (
+        <DraftsPanel
+          onLoadDraft={handleLoadDraft}
+          currentEmailId={currentEmailId}
+          onClose={() => setShowDraftsPanel(false)}
+        />
+      )}
 
       {/* Toast notifications */}
       <Toaster />
