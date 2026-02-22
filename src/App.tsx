@@ -27,6 +27,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { KoreLogo } from "./components/KoreLogo";
 import { BottomBar } from "./components/BottomBar";
+import { TopBar } from "./components/TopBar";
 import { DragDotsIcon } from "./components/DragDotsIcon";
 import agentConfigImg from "figma:asset/49248dbd165caf7144a4cb6ade908b8d36ee2839.png";
 import { Copy, Check, Circle, Trash2, GripVertical, Image, List, FileText, RefreshCw, Grid3x3, AlertTriangle, MessageSquare, Code, Columns, Video, BarChart3, Clock, Minus, Mail, ChevronLeft, ChevronRight, PanelLeftClose, PanelRightClose, PanelLeft, PanelRight, Settings, Info, Wrench, Eye, Zap, LayoutGrid, ArrowLeftRight, Quote, Megaphone, Table, Clapperboard, Play, PieChart, Calendar, Star, Bug, Map, Users, AlertOctagon } from 'lucide-react';
@@ -1380,6 +1381,7 @@ export default function App() {
   const [currentEmailId, setCurrentEmailId] = useState<string | undefined>(undefined);
   const [showDraftsPanel, setShowDraftsPanel] = useState(false);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile' | 'dark'>('desktop');
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [sizeKB, setSizeKB] = useState(0);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
   const [saving, setSaving] = useState(false);
@@ -2382,38 +2384,44 @@ export default function App() {
         }}
       >
       
-      {/* Header - Refined with better spacing */}
+      {/* Header */}
       <header className="border-b bg-card">
-        <div className="flex items-center justify-between px-6 h-[72px]">
-          {/* Left Section: Logo + Title */}
-          <div className="flex items-center gap-4">
-            <div className="w-24 h-auto">
-              <KoreLogo />
-            </div>
-            <Separator orientation="vertical" className="h-8" />
-            <h1 className="font-bold tracking-tight">Email Builder</h1>
+        <div className="flex items-center justify-between px-6 h-[72px]" style={{ gap: '16px' }}>
+          {/* Left + Right via TopBar (wraps logo, subject, save status, share/drafts/history) */}
+          <div style={{ flex: 1, minWidth: 0, display: 'flex', overflow: 'hidden' }}>
+            <TopBar
+              subject={emailState.header.title}
+              onSubjectChange={(s) => setEmailState(prev => ({ ...prev, header: { ...prev.header, title: s } }))}
+              saving={saving}
+              savedAt={savedAt}
+              emailId={currentEmailId ?? ''}
+              onShowDrafts={() => setShowDraftsPanel(!showDraftsPanel)}
+              onShowVersionHistory={() => setShowVersionHistory(true)}
+            />
           </div>
 
-          {/* Center Section: Mode Toggle */}
-          <Tabs value={mode} onValueChange={(v) => setMode(v as 'build' | 'preview' | 'code')}>
-            <TabsList className="shadow-sm">
-              <TabsTrigger value="build" className="gap-1.5 min-w-[100px] data-[state=active]:ring-1 data-[state=active]:ring-border" title="Design and edit your email">
-                <Wrench className="w-4 h-4 shrink-0" />
-                Build
-              </TabsTrigger>
-              <TabsTrigger value="preview" className="gap-1.5 min-w-[100px] data-[state=active]:ring-1 data-[state=active]:ring-border" title="See how your email will look">
-                <Eye className="w-4 h-4 shrink-0" />
-                Preview
-              </TabsTrigger>
-              <TabsTrigger value="code" className="gap-1.5 min-w-[100px] data-[state=active]:ring-1 data-[state=active]:ring-border" title="View and copy the email HTML code">
-                <Code className="w-4 h-4 shrink-0" />
-                HTML
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
+          {/* Center: Mode Toggle */}
+          <div style={{ flexShrink: 0 }}>
+            <Tabs value={mode} onValueChange={(v) => setMode(v as 'build' | 'preview' | 'code')}>
+              <TabsList className="shadow-sm">
+                <TabsTrigger value="build" className="gap-1.5 min-w-[100px] data-[state=active]:ring-1 data-[state=active]:ring-border" title="Design and edit your email">
+                  <Wrench className="w-4 h-4 shrink-0" />
+                  Build
+                </TabsTrigger>
+                <TabsTrigger value="preview" className="gap-1.5 min-w-[100px] data-[state=active]:ring-1 data-[state=active]:ring-border" title="See how your email will look">
+                  <Eye className="w-4 h-4 shrink-0" />
+                  Preview
+                </TabsTrigger>
+                <TabsTrigger value="code" className="gap-1.5 min-w-[100px] data-[state=active]:ring-1 data-[state=active]:ring-border" title="View and copy the email HTML code">
+                  <Code className="w-4 h-4 shrink-0" />
+                  HTML
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
 
-          {/* Right Section: Actions */}
-          <div className="flex items-center gap-3">
+          {/* Far right: Template selector + Theme toggle */}
+          <div className="flex items-center gap-2" style={{ flexShrink: 0 }}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <div>
@@ -2421,7 +2429,7 @@ export default function App() {
                     value={currentTemplate in TEMPLATE_LABELS ? currentTemplate : 'custom'}
                     onValueChange={handleTemplateChange}
                   >
-                    <SelectTrigger className="h-9 w-52 border-border/60">
+                    <SelectTrigger className="h-9 w-44 border-border/60">
                       <SelectValue placeholder="Template" />
                     </SelectTrigger>
                     <SelectContent>
@@ -2440,8 +2448,6 @@ export default function App() {
                 <p>Choose a template to start with</p>
               </TooltipContent>
             </Tooltip>
-            
-            {/* Theme Settings Toggle - Available in both Build and Preview modes */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -2449,7 +2455,6 @@ export default function App() {
                   size="icon"
                   onClick={() => {
                     setShowThemePanel(!showThemePanel);
-                    // Close theme panel deselects any selected block
                     if (!showThemePanel && selectedBlockId) {
                       setSelectedBlockId(null);
                     }
@@ -2461,22 +2466,6 @@ export default function App() {
               </TooltipTrigger>
               <TooltipContent>
                 <p>Global theme settings</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant={showDraftsPanel ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setShowDraftsPanel(!showDraftsPanel)}
-                  className="transition-all hover:scale-105 active:scale-95 gap-1.5"
-                >
-                  <Mail className="w-4 h-4" />
-                  Drafts
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Open drafts panel</p>
               </TooltipContent>
             </Tooltip>
           </div>
