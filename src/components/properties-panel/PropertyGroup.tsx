@@ -28,23 +28,7 @@ export const PropertyGroup = React.memo(({
 }: PropertyGroupProps) => {
   const { blockType } = usePropertySectionsContext();
 
-  if (!title) {
-    return (
-      <>
-        {separator && <Separator className="my-3" />}
-        <div className={cn(
-          'w-full',
-          spacing === 'compact' && 'space-y-2',
-          spacing === 'normal' && 'space-y-2.5',
-          spacing === 'spacious' && 'space-y-3',
-          className
-        )}>
-          {children}
-        </div>
-      </>
-    );
-  }
-
+  // All hooks must be called unconditionally (Rules of Hooks)
   const storageKey = getGroupStorageKey(blockType, title);
 
   const [open, setOpen] = useState<boolean>(() => {
@@ -64,6 +48,23 @@ export const PropertyGroup = React.memo(({
       // ignore storage errors
     }
   };
+
+  if (!title) {
+    return (
+      <>
+        {separator && <Separator className="my-3" />}
+        <div className={cn(
+          'w-full',
+          spacing === 'compact' && 'space-y-2',
+          spacing === 'normal' && 'space-y-2.5',
+          spacing === 'spacious' && 'space-y-3',
+          className
+        )}>
+          {children}
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
