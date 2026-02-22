@@ -28,7 +28,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { KoreLogo } from "./components/KoreLogo";
 import { DragDotsIcon } from "./components/DragDotsIcon";
 import agentConfigImg from "figma:asset/49248dbd165caf7144a4cb6ade908b8d36ee2839.png";
-import { Copy, Check, Circle, Trash2, GripVertical, Image, List, FileText, RefreshCw, Grid3x3, AlertTriangle, MessageSquare, Code, Columns, Video, BarChart3, Clock, Minus, Mail, ChevronLeft, ChevronRight, PanelLeftClose, PanelRightClose, PanelLeft, PanelRight, Settings, Info, Wrench, Eye } from 'lucide-react';
+import { Copy, Check, Circle, Trash2, GripVertical, Image, List, FileText, RefreshCw, Grid3x3, AlertTriangle, MessageSquare, Code, Columns, Video, BarChart3, Clock, Minus, Mail, ChevronLeft, ChevronRight, PanelLeftClose, PanelRightClose, PanelLeft, PanelRight, Settings, Info, Wrench, Eye, Zap } from 'lucide-react';
 import { Button } from "./components/ui/button";
 import { ScrollArea } from "./components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "./components/ui/tabs";
@@ -123,6 +123,7 @@ import { StatsMetrics } from "./components/email-blocks/StatsMetrics";
 import { Timeline } from "./components/email-blocks/Timeline";
 import { DividerBlock } from "./components/email-blocks/DividerBlock";
 import { ImageContentBlock } from "./components/email-blocks/ImageContentBlock";
+import { HeroBlock } from "./components/email-blocks/HeroBlock";
 
 
 // Email Template Wrapper – layout style (Copenhagen, New York, Oslo) controls radius and border
@@ -312,6 +313,12 @@ const contentBlockLibrary = [
     name: 'Divider',
     description: 'Horizontal line separator',
     icon: Minus
+  },
+  {
+    type: 'hero' as ContentBlockType,
+    name: 'Hero',
+    description: 'Large display hero with badge and CTA',
+    icon: Zap
   }
 ];
 
@@ -1979,7 +1986,8 @@ export default function App() {
           }
         ]
       },
-      'divider': {}
+      'divider': {},
+      'hero': {}
     };
     
     // ✅ USE CENTRALIZED BLOCK_DEFAULTS - Single Source of Truth!
@@ -1996,7 +2004,8 @@ export default function App() {
       'video-block': 'video',
       'stats-metrics': 'stats-metrics',
       'timeline': 'timeline',
-      'divider': 'divider'
+      'divider': 'divider',
+      'hero': 'hero'
     };
     
     const blockDefaultsKey = blockDefaultsMap[type];
@@ -2091,6 +2100,8 @@ export default function App() {
         return <Timeline {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'divider':
         return <DividerBlock {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
+      case 'hero':
+        return <HeroBlock {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       default:
         return null;
     }

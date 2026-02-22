@@ -111,7 +111,8 @@ export type ContentBlockType =
   | 'stats-metrics'
   | 'timeline'
   | 'divider'
-  | 'image-content';
+  | 'image-content'
+  | 'hero';
 
 export interface ContentBlock {
   id: string;
@@ -623,6 +624,7 @@ export function PropertiesPanel({
       case 'timeline': return 'Timeline';
       case 'divider': return 'Divider';
       case 'image-content': return 'Image + Content';
+      case 'hero': return 'Hero';
       default: return 'Block Properties';
     }
   };
@@ -642,6 +644,7 @@ export function PropertiesPanel({
       case 'timeline': return 'Timeline Events';
       case 'divider': return 'Divider Settings';
       case 'image-content': return 'Image & Content';
+      case 'hero': return 'Hero Settings';
       default: return 'Block Settings';
     }
   };

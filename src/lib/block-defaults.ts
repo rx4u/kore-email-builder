@@ -556,6 +556,21 @@ export const DIVIDER_DEFAULTS = {
   isEmailMode: false,
 };
 
+export const HERO_DEFAULTS = {
+  badge: 'New Release',
+  showBadge: true,
+  title: "What's New in v2.0",
+  subtitle: 'The biggest update yet — faster, smarter, and more powerful.',
+  showSubtitle: true,
+  ctaText: "See what's new",
+  ctaUrl: '#',
+  showCta: true,
+  bgColor: '#09090b',
+  textColor: '#f4f4f5',
+  displaySize: 56,
+};
+
+
 // ============================================================================
 // MASTER BLOCK DEFAULTS OBJECT
 // ============================================================================
@@ -583,6 +598,7 @@ export const BLOCK_DEFAULTS = {
   video: VIDEO_DEFAULTS,
   'code-snippet': CODE_SNIPPET_DEFAULTS,
   divider: DIVIDER_DEFAULTS,
+  hero: HERO_DEFAULTS,
 } as const;
 
 // ============================================================================

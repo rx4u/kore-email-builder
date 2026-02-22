@@ -143,6 +143,12 @@ function generateHeaderHTML(header: any): string {
 function generateBlockHTML(block: any): string {
   // Support both flat block and { id, type, props } shape from app state
   const props = block.props != null ? { ...block.props, type: block.type } : block;
+
+  // Hero block manages its own <tr><td> structure with custom bgColor
+  if (block.type === 'hero') {
+    return generateBlockContent(props);
+  }
+
   const backgroundColor = colorValueToHex(props.backgroundColor || '#ffffff');
   const padding = resolvePaddingToPx(props.padding, 'block');
 
@@ -287,6 +293,18 @@ function generateBlockContent(block: any): string {
 
     case 'divider':
       return `<hr style="border: none; border-top: ${block.thickness || '1px'} ${block.style || 'solid'} ${colorValueToHex(block.color || '#e5e7eb')}; margin: ${block.spacing || '24px'} 0;" />`;
+
+    case 'hero': {
+      const { badge, showBadge, title, subtitle, showSubtitle, ctaText, ctaUrl, showCta, bgColor = '#09090b', textColor = '#f4f4f5', displaySize = 56 } = block;
+      return `<tr>
+  <td align="center" bgcolor="${bgColor}" style="background-color:${bgColor}; padding:64px 40px; text-align:center;">
+    ${showBadge && badge ? `<div style="margin-bottom:16px;"><span style="display:inline-block; padding:4px 14px; border-radius:100px; border:1px solid ${textColor}40; color:${textColor}; font-size:12px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; font-family:'DM Sans',Arial,sans-serif;">${badge}</span></div>` : ''}
+    <div style="font-size:${displaySize}px; font-weight:800; line-height:1.1; color:${textColor}; margin:0 0 16px; font-family:'DM Serif Display',Georgia,serif; letter-spacing:-0.02em;">${title}</div>
+    ${showSubtitle && subtitle ? `<div style="font-size:18px; color:${textColor}b3; margin:0 0 32px; font-family:'DM Sans',Arial,sans-serif; line-height:1.6;">${subtitle}</div>` : ''}
+    ${showCta && ctaText ? `<a href="${ctaUrl || '#'}" style="display:inline-block; padding:14px 32px; background-color:#f59e0b; color:#09090b; text-decoration:none; border-radius:8px; font-weight:700; font-size:16px; font-family:'DM Sans',Arial,sans-serif;">${ctaText}</a>` : ''}
+  </td>
+</tr>`;
+    }
     
     default:
       return `<p style="margin: 0; color: #000000; font-size: 14px;">
