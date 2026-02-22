@@ -31,7 +31,7 @@ export const ChangelogBlock = React.memo(function ChangelogBlock({
     { type: 'fix', items: ['Fixed broken pagination on mobile'] },
     { type: 'breaking', items: ['Removed legacy v1 API endpoints'] },
   ],
-  bgColor = '#09090b',
+  bgColor = '#ffffff',
   isEmailMode = false,
 }: ChangelogBlockProps) {
   return (

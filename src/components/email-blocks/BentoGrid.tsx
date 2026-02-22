@@ -20,7 +20,7 @@ export const BentoGrid = React.memo(function BentoGrid({
     { title: 'Zero downtime', description: 'Blue-green deployments with instant rollback.', icon: '⚡', bgColor: '#1c1a00' },
     { title: 'Full visibility', description: 'Real-time logs, traces, and alerts in one place.', icon: '📊', bgColor: '#0a1a0a' },
   ],
-  bgColor = '#09090b',
+  bgColor = '#ffffff',
   isEmailMode = false,
 }: BentoGridProps) {
   const [large, ...small] = cells;

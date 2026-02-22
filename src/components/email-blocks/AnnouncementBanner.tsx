@@ -11,8 +11,8 @@ export interface AnnouncementBannerProps {
 export const AnnouncementBanner = React.memo(function AnnouncementBanner({
   icon = '📣',
   headline = 'Scheduled maintenance: Sunday, March 2 from 2-4 AM UTC',
-  bgColor = '#1c1a00',
-  textColor = '#f59e0b',
+  bgColor = '#ffffff',
+  textColor = '#09090b',
   isEmailMode = false,
 }: AnnouncementBannerProps) {
   return (

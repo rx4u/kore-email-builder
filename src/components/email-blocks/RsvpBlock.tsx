@@ -21,8 +21,8 @@ export const RsvpBlock = React.memo(function RsvpBlock({
   noLabel = "Can't make it",
   exportToken,
   blockId = 'rsvp',
-  apiUrl = 'https://app.kore-email.com',
-  bgColor = '#09090b',
+  apiUrl = 'https://kore-email-builder.vercel.app',
+  bgColor = '#ffffff',
   isEmailMode = false,
 }: RsvpBlockProps) {
   const yesUrl = `${apiUrl}/r/${exportToken || 'preview'}/${blockId}/yes`;

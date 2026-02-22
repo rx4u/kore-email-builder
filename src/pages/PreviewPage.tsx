@@ -12,7 +12,7 @@ interface Comment {
 
 type PageState = 'loading' | 'found' | 'expired' | 'notfound' | 'error';
 
-const API_URL = import.meta.env.VITE_API_URL ?? '';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export function PreviewPage() {
   const { token } = useParams<{ token: string }>();

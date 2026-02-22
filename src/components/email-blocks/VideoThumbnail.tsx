@@ -14,7 +14,7 @@ export const VideoThumbnail = React.memo(function VideoThumbnail({
   thumbnailUrl = 'https://placehold.co/520x293/18181b/f4f4f5?text=Video+Thumbnail',
   caption = 'Product walkthrough — 4 minutes',
   durationLabel = '4:12',
-  bgColor = '#09090b',
+  bgColor = '#ffffff',
   isEmailMode = false,
 }: VideoThumbnailProps) {
   return (

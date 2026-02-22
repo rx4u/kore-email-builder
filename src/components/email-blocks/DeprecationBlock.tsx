@@ -8,6 +8,7 @@ export interface DeprecationBlockProps {
   severity?: 'warning' | 'critical';
   ctaText?: string;
   ctaUrl?: string;
+  outerBgColor?: string;
   isEmailMode?: boolean;
 }
 
@@ -19,6 +20,7 @@ export const DeprecationBlock = React.memo(function DeprecationBlock({
   severity = 'warning',
   ctaText = 'View Migration Guide',
   ctaUrl = '#',
+  outerBgColor = '#ffffff',
   isEmailMode = false,
 }: DeprecationBlockProps) {
   const borderColor = severity === 'critical' ? '#ef4444' : '#f59e0b';
@@ -27,7 +29,7 @@ export const DeprecationBlock = React.memo(function DeprecationBlock({
 
   return (
     <tr>
-      <td style={{ padding: '24px 40px', backgroundColor: '#09090b' }}>
+      <td style={{ padding: '24px 40px', backgroundColor: outerBgColor }}>
         <table width="100%" cellPadding={0} cellSpacing={0} style={{ backgroundColor: bgColor, border: `2px solid ${borderColor}`, borderRadius: '8px' }}>
           <tbody>
             <tr>

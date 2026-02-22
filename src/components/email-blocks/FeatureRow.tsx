@@ -20,7 +20,7 @@ export const FeatureRow = React.memo(function FeatureRow({
   description = 'Automated testing, staging environments, and one-click rollback give your team the safety net to move fast.',
   ctaText = 'Learn more',
   ctaUrl = '#',
-  bgColor = '#09090b',
+  bgColor = '#ffffff',
   isEmailMode = false,
 }: FeatureRowProps) {
   const imageCell = (

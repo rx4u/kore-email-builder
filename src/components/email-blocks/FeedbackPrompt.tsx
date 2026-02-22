@@ -12,6 +12,8 @@ export interface FeedbackPromptProps {
   exportToken?: string;
   blockId?: string;
   apiUrl?: string;
+  bgColor?: string;
+  textColor?: string;
   isEmailMode?: boolean;
 }
 
@@ -25,13 +27,15 @@ export const FeedbackPrompt = React.memo(function FeedbackPrompt({
   ],
   exportToken,
   blockId = 'feedback',
-  apiUrl = 'https://app.kore-email.com',
+  apiUrl = 'https://kore-email-builder.vercel.app',
+  bgColor = '#ffffff',
+  textColor = '#09090b',
   isEmailMode = false,
 }: FeedbackPromptProps) {
   return (
     <tr>
-      <td align="center" style={{ padding: '32px 40px', backgroundColor: '#09090b', fontFamily: 'DM Sans, Arial, sans-serif' }}>
-        <div style={{ color: '#f4f4f5', fontSize: '16px', fontWeight: 600, marginBottom: '20px' }}>{questionText}</div>
+      <td align="center" style={{ padding: '32px 40px', backgroundColor: bgColor, fontFamily: 'DM Sans, Arial, sans-serif' }}>
+        <div style={{ color: textColor, fontSize: '16px', fontWeight: 600, marginBottom: '20px' }}>{questionText}</div>
         <div style={{ display: 'flex', gap: '24px', justifyContent: 'center' }}>
           {options.map(opt => (
             isEmailMode && exportToken ? (

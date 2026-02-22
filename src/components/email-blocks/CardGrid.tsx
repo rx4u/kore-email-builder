@@ -22,7 +22,7 @@ export const CardGrid = React.memo(function CardGrid({
     { icon: '📈', title: 'Usage Analytics', description: 'Track team adoption and feature usage over time.' },
     { icon: '🛡️', title: 'Audit Logs', description: 'Full activity history for compliance and debugging.' },
   ],
-  bgColor = '#09090b',
+  bgColor = '#ffffff',
   isEmailMode = false,
 }: CardGridProps) {
   const rows: Card[][] = [];

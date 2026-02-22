@@ -28,7 +28,7 @@ export const ComparisonTable = React.memo(function ComparisonTable({
     { label: 'Collaboration', values: ['yes', 'partial', 'yes'] },
     { label: 'Gmail-safe export', values: ['yes', 'yes', 'partial'] },
   ],
-  bgColor = '#09090b',
+  bgColor = '#ffffff',
   isEmailMode = false,
 }: ComparisonTableProps) {
   return (

@@ -22,7 +22,7 @@ export const MetricsBlock = React.memo(function MetricsBlock({
     { value: '2,481', label: 'API Calls', delta: '+12%', deltaDirection: 'up' },
     { value: '3', label: 'Incidents', delta: '-2', deltaDirection: 'up' },
   ],
-  bgColor = '#09090b',
+  bgColor = '#ffffff',
   isEmailMode = false,
 }: MetricsBlockProps) {
   const deltaColor = (dir?: string) => dir === 'up' ? '#22c55e' : dir === 'down' ? '#ef4444' : '#71717a';

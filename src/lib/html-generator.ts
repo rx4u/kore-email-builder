@@ -384,7 +384,7 @@ function generateBlockContent(block: any): string {
     }
 
     case 'nps-rating': {
-      const { questionText = 'How satisfied are you with this release?', lowLabel = 'Not at all', highLabel = 'Extremely satisfied', exportToken, blockId = 'nps', apiUrl = 'https://app.kore-email.com' } = block;
+      const { questionText = 'How satisfied are you with this release?', lowLabel = 'Not at all', highLabel = 'Extremely satisfied', exportToken, blockId = 'nps', apiUrl = 'https://kore-email-builder.vercel.app' } = block;
       const npsColors = ['#ef4444','#f97316','#f97316','#fb923c','#fb923c','#eab308','#eab308','#84cc16','#84cc16','#22c55e','#22c55e'];
       const cellsHTML = npsColors.map((color, i) => {
         const href = exportToken ? `${apiUrl}/r/${exportToken}/${blockId}/${i}` : '#';
@@ -544,7 +544,7 @@ function generateBlockContent(block: any): string {
     }
 
     case 'quick-poll': {
-      const { questionText = 'Which area should we prioritize next?', options = [], exportToken, blockId = 'poll', apiUrl = 'https://app.kore-email.com' } = block;
+      const { questionText = 'Which area should we prioritize next?', options = [], exportToken, blockId = 'poll', apiUrl = 'https://kore-email-builder.vercel.app' } = block;
       const btns = options.map((opt: any) => {
         const href = exportToken ? `${apiUrl}/r/${exportToken}/${blockId}/${opt.id}` : '#';
         return `<td style="padding:4px;"><a href="${href}" style="display:inline-block;padding:10px 20px;border-radius:100px;border:1px solid #f59e0b;color:#f59e0b;text-decoration:none;font-size:14px;font-weight:600;font-family:'DM Sans',Arial,sans-serif;">${opt.label||''}</a></td>`;
@@ -558,7 +558,7 @@ function generateBlockContent(block: any): string {
     }
 
     case 'rsvp': {
-      const { eventTitle = '', eventDate, eventLocation, yesLabel = "Yes, I'll attend", noLabel = "Can't make it", exportToken, blockId = 'rsvp', apiUrl = 'https://app.kore-email.com', bgColor = '#09090b' } = block;
+      const { eventTitle = '', eventDate, eventLocation, yesLabel = "Yes, I'll attend", noLabel = "Can't make it", exportToken, blockId = 'rsvp', apiUrl = 'https://kore-email-builder.vercel.app', bgColor = '#09090b' } = block;
       const yesUrl = `${apiUrl}/r/${exportToken||'preview'}/${blockId}/yes`;
       const noUrl = `${apiUrl}/r/${exportToken||'preview'}/${blockId}/no`;
       return `<tr>
@@ -575,7 +575,7 @@ function generateBlockContent(block: any): string {
     }
 
     case 'feedback-prompt': {
-      const { questionText = 'How do you feel about this release?', options = [], exportToken, blockId = 'feedback', apiUrl = 'https://app.kore-email.com' } = block;
+      const { questionText = 'How do you feel about this release?', options = [], exportToken, blockId = 'feedback', apiUrl = 'https://kore-email-builder.vercel.app' } = block;
       const emojis = options.map((opt: any) => {
         const href = exportToken ? `${apiUrl}/r/${exportToken}/${blockId}/${opt.value}` : '#';
         return `<td style="padding:0 12px;text-align:center;">

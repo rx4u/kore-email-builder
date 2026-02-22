@@ -3299,6 +3299,78 @@ export function PropertiesPanel({
     );
   }
 
+  // ========== TIER 2 BLOCK GENERIC PANEL ==========
+  const tier2Types = ['changelog','deprecation','metrics-snapshot','nps-rating','bento-grid','feature-row','pull-quote','announcement-banner','card-grid','comparison-table','gif-demo','video-thumbnail','quick-poll','rsvp','feedback-prompt','known-issues','roadmap-preview','team-attribution','incident-retro'];
+  if (tier2Types.includes(block.type)) {
+    const t2UpdateProp = (key: string, value: unknown) => onBlockChange({ ...block, props: { ...block.props, [key]: value } });
+    const blockLabel = block.type.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    const bgColorKey = block.props.outerBgColor !== undefined ? 'outerBgColor' : 'bgColor';
+    const currentBgColor = block.props.bgColor ?? block.props.outerBgColor ?? '#ffffff';
+    const currentTextColor = block.props.textColor ?? '#09090b';
+    const currentTheme = block.props.theme as string | undefined;
+    return (
+      <PropertyPanelContainer title={blockLabel} onClose={onClose}>
+        <PropertySections defaultOpen={['theme', 'colors']} blockType={block.type}>
+          <SectionGroup label="Theme" showDivider={false}>
+            <PropertySection id="theme" icon={Palette} title="Theme">
+              <ThemePickerControl
+                value={currentTheme}
+                globalDefaultTheme={globalDefaultTheme}
+                onChange={(themeId) => {
+                  if (!themeId) {
+                    t2UpdateProp('theme', undefined);
+                    return;
+                  }
+                  const result = applyThemeToBlock(themeId, false, 'body');
+                  if (result) {
+                    onBlockChange({
+                      ...block,
+                      props: {
+                        ...block.props,
+                        theme: themeId,
+                        [bgColorKey]: result.backgroundColor,
+                        textColor: result.titleColor,
+                      }
+                    });
+                  } else {
+                    t2UpdateProp('theme', themeId);
+                  }
+                }}
+              />
+            </PropertySection>
+          </SectionGroup>
+          <SectionGroup label="Colors">
+            <PropertySection id="colors" icon={Palette} title="Colors">
+              <ColorControlV2
+                label="Background"
+                value={currentBgColor}
+                onChange={(cv) => t2UpdateProp(bgColorKey, colorValueToHex(cv))}
+                purpose="background"
+                currentThemeId={currentTheme}
+                themeZone="body"
+              />
+              <ColorControlV2
+                label="Text"
+                value={currentTextColor}
+                onChange={(cv) => t2UpdateProp('textColor', colorValueToHex(cv))}
+                purpose="text"
+                currentThemeId={currentTheme}
+                themeZone="body"
+              />
+            </PropertySection>
+          </SectionGroup>
+          <SectionGroup label="Info">
+            <PropertySection id="info" icon={Settings} title="Block Settings">
+              <p className="text-xs text-muted-foreground px-6 py-4">
+                Detailed settings for this block coming soon.
+              </p>
+            </PropertySection>
+          </SectionGroup>
+        </PropertySections>
+      </PropertyPanelContainer>
+    );
+  }
+
   // ========== FALLBACK (Should never reach here) ==========
   return (
     <TooltipProvider>

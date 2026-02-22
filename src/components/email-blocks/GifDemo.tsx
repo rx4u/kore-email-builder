@@ -16,7 +16,7 @@ export const GifDemo = React.memo(function GifDemo({
   ctaText = 'Try it yourself',
   ctaUrl = '#',
   showOutlookWarning = true,
-  bgColor = '#09090b',
+  bgColor = '#ffffff',
   isEmailMode = false,
 }: GifDemoProps) {
   return (

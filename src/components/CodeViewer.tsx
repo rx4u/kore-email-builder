@@ -206,7 +206,7 @@ function SendTestDialog({ html, subject }: { html: string; subject: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-1.5 h-9 text-xs" title="Send test email">
+        <Button variant="outline" size="sm" className="gap-1.5 h-9 text-xs hidden" title="Send test email">
           <Mail className="w-3.5 h-3.5" />
           Send Test
         </Button>

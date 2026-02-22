@@ -14,7 +14,7 @@ export const PullQuote = React.memo(function PullQuote({
   authorName = 'Sarah Chen',
   authorTitle = 'VP of Engineering',
   accentColor = '#f59e0b',
-  bgColor = '#09090b',
+  bgColor = '#ffffff',
   isEmailMode = false,
 }: PullQuoteProps) {
   return (

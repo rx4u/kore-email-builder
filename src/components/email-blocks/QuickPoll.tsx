@@ -12,6 +12,9 @@ export interface QuickPollProps {
   blockId?: string;
   apiUrl?: string;
   isEmailMode?: boolean;
+  bgColor?: string;
+  textColor?: string;
+  theme?: string;
 }
 
 export const QuickPoll = React.memo(function QuickPoll({
@@ -24,13 +27,15 @@ export const QuickPoll = React.memo(function QuickPoll({
   ],
   exportToken,
   blockId = 'poll',
-  apiUrl = 'https://app.kore-email.com',
+  apiUrl = 'https://kore-email-builder.vercel.app',
   isEmailMode = false,
+  bgColor = '#ffffff',
+  textColor = '#09090b',
 }: QuickPollProps) {
   return (
     <tr>
-      <td align="center" style={{ padding: '32px 40px', backgroundColor: '#09090b', fontFamily: 'DM Sans, Arial, sans-serif' }}>
-        <div style={{ color: '#f4f4f5', fontSize: '16px', fontWeight: 600, marginBottom: '20px' }}>{questionText}</div>
+      <td align="center" style={{ padding: '32px 40px', backgroundColor: bgColor, fontFamily: 'DM Sans, Arial, sans-serif' }}>
+        <div style={{ color: textColor, fontSize: '16px', fontWeight: 600, marginBottom: '20px' }}>{questionText}</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
           {options.map(opt => (
             isEmailMode && exportToken ? (

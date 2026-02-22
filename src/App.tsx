@@ -54,6 +54,7 @@ import { shallowEqual } from "./lib/performance-utils";
 import { BLOCK_DEFAULTS } from "./lib/block-defaults";
 import { TEMPLATE_COPY } from "./content/template-copy";
 import { loadSession, saveSession, PERSISTENCE_VERSION } from "./lib/browser-persistence";
+import { supabase } from "./lib/supabase";
 import { motion, AnimatePresence } from "motion/react";
 import { panelVariants, sidebarStripVariants, panelContentSwitchVariants, springs, prefersReducedMotion, panelWidthTransition } from "./lib/motion-config";
 
@@ -1088,20 +1089,17 @@ const DraggableBlockLibraryItem = React.memo(({ type, name, icon: IconComponent 
   return (
     <HoverCard openDelay={300} closeDelay={100}>
       <HoverCardTrigger asChild>
-        <Card
+        <div
           ref={setNodeRef}
           {...attributes}
           {...listeners}
-          className="w-full cursor-grab active:cursor-grabbing group border-border/60"
+          className="h-10 px-3 py-2 flex items-center gap-2 rounded-md cursor-grab active:cursor-grabbing border-l-2 border-transparent group hover:bg-muted/40 hover:border-l-amber-400/70 transition-all duration-150"
+          style={{ opacity: isDragging ? 0.5 : 1 }}
         >
-          <CardContent className="p-3.5">
-            <div className="flex items-center gap-3">
-              <IconComponent className={`${iconSizes.md} text-muted-foreground group-hover:text-black transition-colors duration-200 flex-shrink-0`} />
-              <span className="text-sm font-medium flex-1 group-hover:text-black transition-colors">{name}</span>
-              <GripVertical className="w-4 h-4 text-muted-foreground group-hover:text-black transition-colors duration-200 opacity-50 group-hover:opacity-100" />
-            </div>
-          </CardContent>
-        </Card>
+          <IconComponent className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors duration-200 flex-shrink-0" />
+          <span className="text-sm font-medium flex-1">{name}</span>
+          <GripVertical className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-50 transition-opacity duration-150" />
+        </div>
       </HoverCardTrigger>
       <HoverCardContent side="right" align="start" className="w-64">
         <div className="space-y-2">
@@ -1247,62 +1245,33 @@ const SortableBlock = React.memo(({
       data-block-id={block.id}
       onClick={onSelect}
       className={cn(
-        "group relative cursor-pointer border-0",
-          isSelected && "ring-2 ring-black/20 ring-offset-2",
-          isDragging && "opacity-50"
-        )}
-      >
-        {/* Compact Header */}
-        <CardHeader className={cn(
-          "flex flex-row items-center justify-between space-y-0 px-4 py-3 border-b transition-all duration-200",
-          isSelected ? "border-black/20 bg-black/[0.02]" : "border-border/40"
-        )}>
-          <div className="flex items-center gap-3">
-            {/* Drag Handle */}
-            <div
-              {...attributes}
-              {...listeners}
-              className="cursor-grab active:cursor-grabbing p-1.5 -ml-1 hover:bg-muted/60 rounded-sm transition-all hover:scale-110 active:scale-90"
-            >
-              <GripVertical className={cn(
-                "w-4 h-4 transition-colors",
-                isSelected ? "text-black/60" : "text-muted-foreground"
-              )} />
-            </div>
-            
-            <IconComponent className={cn(
-              "w-[18px] h-[18px] transition-colors",
-              isSelected ? "text-black" : "text-muted-foreground"
-            )} />
-            
-            <span className={cn(
-              "text-sm font-medium transition-colors",
-              isSelected ? "text-black" : "text-muted-foreground"
-            )}>
-              {name}
-            </span>
-          </div>
-
-          {/* Delete Button */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                aria-label="Remove block"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRemove();
-              }}
-              className="opacity-0 group-hover:opacity-100 transition-all duration-200 p-1.5 hover:bg-destructive/10 text-muted-foreground hover:text-destructive rounded-sm hover:scale-110 hover:rotate-6 active:scale-90"
-            >
-              <Trash2 className="w-4 h-4" aria-hidden />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Remove block</p>
-          </TooltipContent>
-        </Tooltip>
-      </CardHeader>
+        "group relative cursor-pointer border-0 overflow-hidden border-l-2 transition-all duration-150",
+        isSelected ? "ring-1 ring-amber-400/30 border-l-amber-500" : "border-l-transparent",
+        isDragging && "opacity-40 scale-[0.98]"
+      )}
+    >
+      {/* Floating action bar — top-right, appears on hover */}
+      <div className="absolute top-0 right-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex items-center rounded-bl-lg rounded-tr-xl bg-background/95 backdrop-blur-sm border border-border/60 shadow-sm overflow-hidden">
+        <button
+          {...attributes}
+          {...listeners}
+          className="flex items-center justify-center h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted/50 cursor-grab active:cursor-grabbing transition-colors"
+          title="Drag to reorder"
+          onClick={e => e.stopPropagation()}
+        >
+          <GripVertical className="h-4 w-4" />
+        </button>
+        <div className="w-px h-4 bg-border/60" />
+        <button
+          type="button"
+          aria-label="Remove block"
+          onClick={(e) => { e.stopPropagation(); onRemove(); }}
+          className="flex items-center justify-center h-7 w-7 text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors"
+          title="Remove block"
+        >
+          <Trash2 className="h-3.5 w-3.5" aria-hidden />
+        </button>
+      </div>
 
       {/* Content Preview */}
       <CardContent className="py-5 px-0">
@@ -1310,6 +1279,13 @@ const SortableBlock = React.memo(({
           {children}
         </div>
       </CardContent>
+
+      {/* Block type badge — bottom-left, visible only when selected */}
+      {isSelected && (
+        <div className="absolute bottom-0 left-0 rounded-tr-md bg-muted/80 text-[10px] text-muted-foreground px-2 py-0.5 font-mono">
+          {block.type}
+        </div>
+      )}
     </Card>
   );
 }, (prevProps, nextProps) => {
@@ -1371,6 +1347,10 @@ export default function App() {
   const [rightPanelCollapsed, setRightPanelCollapsed] = useState(false);
   const [showThemePanel, setShowThemePanel] = useState(false);
   const [globalTheme, setGlobalTheme] = useState<GlobalThemeSettings>(DEFAULT_GLOBAL_THEME);
+  // User profile from Supabase session
+  const [appUser, setAppUser] = useState<{ name: string; email: string; avatarUrl?: string } | null>(null);
+  // Track newly added block IDs for entry animation
+  const [newBlockIds, setNewBlockIds] = useState<Set<string>>(new Set());
   const emailContainerRef = useRef<HTMLDivElement>(null);
   const emailSafeContainerRef = useRef<HTMLDivElement>(null);
   const prevDefaultLogoSizeRef = useRef(globalTheme.defaultLogoSize);
@@ -1461,6 +1441,33 @@ export default function App() {
     });
   }, [emailState.content]);
   
+  // Load Supabase user for profile display in TopBar
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      const u = data.session?.user;
+      if (u) {
+        setAppUser({
+          name: u.user_metadata?.full_name || u.user_metadata?.name || '',
+          email: u.email || '',
+          avatarUrl: u.user_metadata?.avatar_url || undefined,
+        });
+      }
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      const u = session?.user;
+      if (u) {
+        setAppUser({
+          name: u.user_metadata?.full_name || u.user_metadata?.name || '',
+          email: u.email || '',
+          avatarUrl: u.user_metadata?.avatar_url || undefined,
+        });
+      } else {
+        setAppUser(null);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
   // Restore session from localStorage on mount (once)
   useEffect(() => {
     const session = loadSession();
@@ -1952,7 +1959,10 @@ export default function App() {
         
         setSelectedBlockId(newBlock.id);
         setShowThemePanel(false);
-        
+        // Trigger block-enter animation
+        setNewBlockIds(prev => new Set(prev).add(newBlock.id));
+        setTimeout(() => setNewBlockIds(prev => { const n = new Set(prev); n.delete(newBlock.id); return n; }), 300);
+
         toast.success(`${blockMeta.name} added`);
         
         forensicDebugger.log('DRAG_END', 'handleDragEnd.SCHEDULING_CLEANUP', {
@@ -2178,7 +2188,26 @@ export default function App() {
       'stats-metrics': 'stats-metrics',
       'timeline': 'timeline',
       'divider': 'divider',
-      'hero': 'hero'
+      'hero': 'hero',
+      'changelog': 'changelog',
+      'deprecation': 'deprecation',
+      'metrics-snapshot': 'metrics-snapshot',
+      'nps-rating': 'nps-rating',
+      'bento-grid': 'bento-grid',
+      'feature-row': 'feature-row',
+      'pull-quote': 'pull-quote',
+      'announcement-banner': 'announcement-banner',
+      'card-grid': 'card-grid',
+      'comparison-table': 'comparison-table',
+      'gif-demo': 'gif-demo',
+      'video-thumbnail': 'video-thumbnail',
+      'quick-poll': 'quick-poll',
+      'rsvp': 'rsvp',
+      'feedback-prompt': 'feedback-prompt',
+      'known-issues': 'known-issues',
+      'roadmap-preview': 'roadmap-preview',
+      'team-attribution': 'team-attribution',
+      'incident-retro': 'incident-retro',
     };
     
     const blockDefaultsKey = blockDefaultsMap[type];
@@ -2276,43 +2305,43 @@ export default function App() {
       case 'hero':
         return <HeroBlock {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'changelog':
-        return <ChangelogBlock {...block.props} isEmailMode={isEmailMode} />;
+        return <ChangelogBlock {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'deprecation':
-        return <DeprecationBlock {...block.props} isEmailMode={isEmailMode} />;
+        return <DeprecationBlock {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'metrics-snapshot':
-        return <MetricsBlock {...block.props} isEmailMode={isEmailMode} />;
+        return <MetricsBlock {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'nps-rating':
-        return <NpsBlock {...block.props} isEmailMode={isEmailMode} />;
+        return <NpsBlock {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'bento-grid':
-        return <BentoGrid {...block.props} isEmailMode={isEmailMode} />;
+        return <BentoGrid {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'feature-row':
-        return <FeatureRow {...block.props} isEmailMode={isEmailMode} />;
+        return <FeatureRow {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'pull-quote':
-        return <PullQuote {...block.props} isEmailMode={isEmailMode} />;
+        return <PullQuote {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'announcement-banner':
-        return <AnnouncementBanner {...block.props} isEmailMode={isEmailMode} />;
+        return <AnnouncementBanner {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'card-grid':
-        return <CardGrid {...block.props} isEmailMode={isEmailMode} />;
+        return <CardGrid {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'comparison-table':
-        return <ComparisonTable {...block.props} isEmailMode={isEmailMode} />;
+        return <ComparisonTable {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'gif-demo':
-        return <GifDemo {...block.props} isEmailMode={isEmailMode} />;
+        return <GifDemo {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'video-thumbnail':
-        return <VideoThumbnail {...block.props} isEmailMode={isEmailMode} />;
+        return <VideoThumbnail {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'quick-poll':
-        return <QuickPoll {...block.props} isEmailMode={isEmailMode} />;
+        return <QuickPoll {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'rsvp':
-        return <RsvpBlock {...block.props} isEmailMode={isEmailMode} />;
+        return <RsvpBlock {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'feedback-prompt':
-        return <FeedbackPrompt {...block.props} isEmailMode={isEmailMode} />;
+        return <FeedbackPrompt {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'known-issues':
-        return <KnownIssues {...block.props} isEmailMode={isEmailMode} />;
+        return <KnownIssues {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'roadmap-preview':
-        return <RoadmapPreview {...block.props} isEmailMode={isEmailMode} />;
+        return <RoadmapPreview {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'team-attribution':
-        return <TeamAttribution {...block.props} isEmailMode={isEmailMode} />;
+        return <TeamAttribution {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'incident-retro':
-        return <IncidentRetro {...block.props} isEmailMode={isEmailMode} />;
+        return <IncidentRetro {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       default:
         return null;
     }
@@ -2385,52 +2414,52 @@ export default function App() {
         }}
       >
       
-      {/* Header */}
+      {/* Header — 2 rows */}
       <header className="border-b bg-card">
-        <div className="flex items-center justify-between px-6 h-[72px]" style={{ gap: '16px' }}>
-          {/* Left + Right via TopBar (wraps logo, subject, save status, share/drafts/history) */}
-          <div style={{ flex: 1, minWidth: 0, display: 'flex', overflow: 'hidden' }}>
-            <TopBar
-              subject={emailState.header.title}
-              onSubjectChange={(s) => setEmailState(prev => ({ ...prev, header: { ...prev.header, title: s } }))}
-              saving={saving}
-              savedAt={savedAt}
-              emailId={currentEmailId ?? ''}
-              onShowDrafts={() => setShowDraftsPanel(!showDraftsPanel)}
-              onShowVersionHistory={() => setShowVersionHistory(true)}
-            />
-          </div>
+        {/* Row 1: Logo + Subject + Save + Share/Drafts/History + User Avatar */}
+        <div className="flex items-center px-4 h-[48px] border-b border-border/40">
+          <TopBar
+            subject={emailState.header.title}
+            onSubjectChange={(s) => setEmailState(prev => ({ ...prev, header: { ...prev.header, title: s } }))}
+            saving={saving}
+            savedAt={savedAt}
+            emailId={currentEmailId ?? ''}
+            onShowDrafts={() => setShowDraftsPanel(!showDraftsPanel)}
+            onShowVersionHistory={() => setShowVersionHistory(true)}
+            user={appUser}
+          />
+        </div>
 
-          {/* Center: Mode Toggle */}
-          <div style={{ flexShrink: 0 }}>
-            <Tabs value={mode} onValueChange={(v) => setMode(v as 'build' | 'preview' | 'code')}>
-              <TabsList className="shadow-sm">
-                <TabsTrigger value="build" className="gap-1.5 min-w-[100px] data-[state=active]:ring-1 data-[state=active]:ring-border" title="Design and edit your email">
-                  <Wrench className="w-4 h-4 shrink-0" />
-                  Build
-                </TabsTrigger>
-                <TabsTrigger value="preview" className="gap-1.5 min-w-[100px] data-[state=active]:ring-1 data-[state=active]:ring-border" title="See how your email will look">
-                  <Eye className="w-4 h-4 shrink-0" />
-                  Preview
-                </TabsTrigger>
-                <TabsTrigger value="code" className="gap-1.5 min-w-[100px] data-[state=active]:ring-1 data-[state=active]:ring-border" title="View and copy the email HTML code">
-                  <Code className="w-4 h-4 shrink-0" />
-                  HTML
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
+        {/* Row 2: Mode tabs + Template selector + Theme button */}
+        <div className="flex items-center justify-between px-6 h-9 bg-muted/20">
+          {/* Mode Toggle */}
+          <Tabs value={mode} onValueChange={(v) => setMode(v as 'build' | 'preview' | 'code')}>
+            <TabsList className="h-7">
+              <TabsTrigger value="build" className="h-7 text-xs gap-1 px-3 data-[state=active]:ring-1 data-[state=active]:ring-border" title="Design and edit your email">
+                <Wrench className="w-3 h-3 shrink-0" />
+                Build
+              </TabsTrigger>
+              <TabsTrigger value="preview" className="h-7 text-xs gap-1 px-3 data-[state=active]:ring-1 data-[state=active]:ring-border" title="See how your email will look">
+                <Eye className="w-3 h-3 shrink-0" />
+                Preview
+              </TabsTrigger>
+              <TabsTrigger value="code" className="h-7 text-xs gap-1 px-3 data-[state=active]:ring-1 data-[state=active]:ring-border" title="View and copy the email HTML code">
+                <Code className="w-3 h-3 shrink-0" />
+                HTML
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
 
-          {/* Far right: Template selector + Theme toggle */}
-          <div className="flex items-center gap-2" style={{ flexShrink: 0 }}>
+          {/* Template selector + Theme toggle */}
+          <div className="flex items-center gap-2">
             <Tooltip>
               <TooltipTrigger asChild>
                 <div>
-                  <Select 
+                  <Select
                     value={currentTemplate in TEMPLATE_LABELS ? currentTemplate : 'custom'}
                     onValueChange={handleTemplateChange}
                   >
-                    <SelectTrigger className="h-9 w-44 border-border/60">
+                    <SelectTrigger className="h-7 w-40 text-xs border-border/60">
                       <SelectValue placeholder="Template" />
                     </SelectTrigger>
                     <SelectContent>
@@ -2454,15 +2483,15 @@ export default function App() {
                 <Button
                   variant={showThemePanel ? "default" : "outline"}
                   size="icon"
+                  className="h-7 w-7 transition-all hover:scale-105 active:scale-95"
                   onClick={() => {
                     setShowThemePanel(!showThemePanel);
                     if (!showThemePanel && selectedBlockId) {
                       setSelectedBlockId(null);
                     }
                   }}
-                  className="transition-all hover:scale-105 active:scale-95"
                 >
-                  <Settings className="w-4 h-4 transition-transform" style={{ transform: showThemePanel ? 'rotate(45deg)' : 'rotate(0deg)' }} />
+                  <Settings className="w-3.5 h-3.5 transition-transform" style={{ transform: showThemePanel ? 'rotate(45deg)' : 'rotate(0deg)' }} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -2554,15 +2583,23 @@ export default function App() {
                 />
                 <div className="flex-1 overflow-hidden">
                   <ScrollArea className="h-full">
-                    <div className="p-4 space-y-2.5">
-                      {contentBlockLibrary.map((block) => (
-                        <DraggableBlockLibraryItem
-                          key={block.type}
-                          type={block.type}
-                          name={block.name}
-                          icon={block.icon}
-                        />
+                    <div className="px-3 py-2 flex flex-col">
+                      {/* Layout category */}
+                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-1 mt-2 mb-1">Layout</p>
+                      {contentBlockLibrary.filter(b => ['hero', 'image-content', 'two-column', 'divider'].includes(b.type)).map((block) => (
+                        <DraggableBlockLibraryItem key={block.type} type={block.type} name={block.name} icon={block.icon} />
                       ))}
+                      {/* Content category */}
+                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-1 mt-4 mb-1">Content</p>
+                      {contentBlockLibrary.filter(b => !['hero', 'image-content', 'two-column', 'divider', 'quick-poll', 'rsvp', 'feedback-prompt', 'nps-rating'].includes(b.type)).map((block) => (
+                        <DraggableBlockLibraryItem key={block.type} type={block.type} name={block.name} icon={block.icon} />
+                      ))}
+                      {/* Interactive category */}
+                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-semibold px-1 mt-4 mb-1">Interactive</p>
+                      {contentBlockLibrary.filter(b => ['quick-poll', 'rsvp', 'feedback-prompt', 'nps-rating'].includes(b.type)).map((block) => (
+                        <DraggableBlockLibraryItem key={block.type} type={block.type} name={block.name} icon={block.icon} />
+                      ))}
+                      <div className="h-4" />
                     </div>
                   </ScrollArea>
                 </div>
@@ -2712,6 +2749,7 @@ export default function App() {
                               <DropIndicator id="drop-0" isOver={overId === 'drop-0'} />
                               {emailState.content.map((block, index) => (
                                 <React.Fragment key={block.id}>
+                                  <div className={newBlockIds.has(block.id) ? 'block-enter' : ''}>
                                   <SortableBlock
                                   block={block}
                                   isSelected={selectedBlockId === block.id}
@@ -2734,9 +2772,10 @@ export default function App() {
                                       {renderContentBlock(block, false, true)}
                                     </EmailTemplate>
                                   </SortableBlock>
-                                  <DropIndicator 
-                                    id={`drop-${index + 1}`} 
-                                    isOver={overId === `drop-${index + 1}`} 
+                                  </div>
+                                  <DropIndicator
+                                    id={`drop-${index + 1}`}
+                                    isOver={overId === `drop-${index + 1}`}
                                   />
                                 </React.Fragment>
                               ))}

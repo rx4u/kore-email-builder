@@ -24,7 +24,7 @@ export const IncidentRetro = React.memo(function IncidentRetro({
     'Require load test in staging before next deploy',
     'Update runbook with rollback procedure',
   ],
-  bgColor = '#09090b',
+  bgColor = '#ffffff',
   isEmailMode = false,
 }: IncidentRetroProps) {
   const Field = ({ label, value }: { label: string; value: string }) => (

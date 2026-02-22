@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export async function inlineAndExport(html: string): Promise<{ html: string; sizeKB: number; clipped: boolean }> {
   const res = await fetch(`${API_URL}/export`, {

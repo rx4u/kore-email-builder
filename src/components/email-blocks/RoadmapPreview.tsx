@@ -14,10 +14,25 @@ export interface RoadmapPreviewProps {
   isEmailMode?: boolean;
 }
 
-const STATUS_CONFIG: Record<RoadmapStatus, { label: string; color: string; bg: string }> = {
+function isDarkBg(hex: string): boolean {
+  const h = hex.replace('#', '');
+  if (h.length < 6) return true;
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return (r * 299 + g * 587 + b * 114) / 1000 < 128;
+}
+
+const STATUS_DARK: Record<RoadmapStatus, { label: string; color: string; bg: string }> = {
   now:   { label: 'Now',   color: '#22c55e', bg: '#052e16' },
   next:  { label: 'Next',  color: '#3b82f6', bg: '#0a0a1c' },
   later: { label: 'Later', color: '#71717a', bg: '#1a1a1a' },
+};
+
+const STATUS_LIGHT: Record<RoadmapStatus, { label: string; color: string; bg: string }> = {
+  now:   { label: 'Now',   color: '#16a34a', bg: '#dcfce7' },
+  next:  { label: 'Next',  color: '#2563eb', bg: '#dbeafe' },
+  later: { label: 'Later', color: '#52525b', bg: '#f4f4f5' },
 };
 
 export const RoadmapPreview = React.memo(function RoadmapPreview({
@@ -27,13 +42,18 @@ export const RoadmapPreview = React.memo(function RoadmapPreview({
     { label: 'Salesforce integration', status: 'later' },
     { label: 'Mobile app (iOS + Android)', status: 'later' },
   ],
-  bgColor = '#09090b',
+  bgColor = '#ffffff',
   isEmailMode = false,
 }: RoadmapPreviewProps) {
+  const dark = isDarkBg(bgColor);
+  const STATUS_CONFIG = dark ? STATUS_DARK : STATUS_LIGHT;
+  const textPrimary = dark ? '#f4f4f5' : '#09090b';
+  const textMuted = dark ? '#71717a' : '#52525b';
+
   return (
     <tr>
       <td bgcolor={bgColor} style={{ backgroundColor: bgColor, padding: '32px 40px', fontFamily: 'DM Sans, Arial, sans-serif' }}>
-        <div style={{ color: '#71717a', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.1em', marginBottom: '20px' }}>Roadmap</div>
+        <div style={{ color: textMuted, fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.1em', marginBottom: '20px' }}>Roadmap</div>
         {items.map((item, i) => {
           const config = STATUS_CONFIG[item.status];
           return (
@@ -42,8 +62,8 @@ export const RoadmapPreview = React.memo(function RoadmapPreview({
                 {config.label}
               </span>
               <div>
-                <div style={{ color: '#f4f4f5', fontSize: '14px', fontWeight: 600 }}>{item.label}</div>
-                {item.description && <div style={{ color: '#71717a', fontSize: '12px', marginTop: '2px' }}>{item.description}</div>}
+                <div style={{ color: textPrimary, fontSize: '14px', fontWeight: 600 }}>{item.label}</div>
+                {item.description && <div style={{ color: textMuted, fontSize: '12px', marginTop: '2px' }}>{item.description}</div>}
               </div>
             </div>
           );
