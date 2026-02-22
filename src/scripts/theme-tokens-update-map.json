@@ -1,0 +1,142 @@
+{
+  "kore-default": {
+    "header": { "bg200": "#8097F5", "bg300": "#BFC9FA" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FCFDFE", "bg300": "#FEFEFF" }
+  },
+  "brand-light": {
+    "header": { "bg200": "#F5F9FF", "bg300": "#FAFCFF" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FCFDFE", "bg300": "#FEFEFF" }
+  },
+  "brand-primary": {
+    "header": { "bg200": "#8097F5", "bg300": "#BFC9FA" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#F5F9FF", "bg300": "#FAFCFF" }
+  },
+  "brand-dark": {
+    "header": { "bg200": "#D4DDFF", "bg300": "#EAEEFF" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#F8FAFB", "bg300": "#FCFDFE" }
+  },
+  "neutral-light": {
+    "header": { "bg200": "#FCFDFE", "bg300": "#FEFEFF" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#F8FAFB", "bg300": "#FCFDFE" }
+  },
+  "neutral": {
+    "header": { "bg200": "#F0F4F7", "bg300": "#F8FAFB" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FCFDFE", "bg300": "#FEFEFF" }
+  },
+  "neutral-dark": {
+    "header": { "bg200": "#D9DDE6", "bg300": "#ECEFF2" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#F8FAFB", "bg300": "#FCFDFE" }
+  },
+  "system-blue": {
+    "header": { "bg200": "#80BDFF", "bg300": "#BFDEFF" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#F7FCFF", "bg300": "#FBFEFF" }
+  },
+  "complexity-orange": {
+    "header": { "bg200": "#FFCA80", "bg300": "#FFE4BF" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FFFBF6", "bg300": "#FFFDFB" }
+  },
+  "lime-grid": {
+    "header": { "bg200": "#E9F9BA", "bg300": "#F4FCDD" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FBFDF7", "bg300": "#FDFEFB" }
+  },
+  "deep-olive": {
+    "header": { "bg200": "#D1E6DB", "bg300": "#E8F2ED" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#F7F9F8", "bg300": "#FBFCFC" }
+  },
+  "retro-red": {
+    "header": { "bg200": "#EE89A1", "bg300": "#F6C4D0" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FFFAFC", "bg300": "#FFFDFE" }
+  },
+  "electric-indigo": {
+    "header": { "bg200": "#B1B2F8", "bg300": "#D8D9FC" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#F6F8FF", "bg300": "#FBFCFF" }
+  },
+  "resonant-moss": {
+    "header": { "bg200": "#C1D4C5", "bg300": "#E0E9E2" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#F8FBF9", "bg300": "#FBFDFB" }
+  },
+  "tangerine-cream": {
+    "header": { "bg200": "#FFD9A3", "bg300": "#FFECD1" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FFFBF7", "bg300": "#FFFDFA" }
+  },
+  "golden-clay": {
+    "header": { "bg200": "#ECD290", "bg300": "#F5E8C7" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FFFDF7", "bg300": "#FFFEFB" }
+  },
+  "soft-ivory": {
+    "header": { "bg200": "#FDF0E6", "bg300": "#FEF7F2" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FFFBF7", "bg300": "#FFFDFA" }
+  },
+  "deep-forest": {
+    "header": { "bg200": "#CDE4D6", "bg300": "#E6F1EB" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#F7FCF9", "bg300": "#FBFDFB" }
+  },
+  "spring-leaf": {
+    "header": { "bg200": "#BBD1A5", "bg300": "#DDE8D2" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FAFCF7", "bg300": "#FCFEFB" }
+  },
+  "mahogany-glow": {
+    "header": { "bg200": "#E4D3CC", "bg300": "#F1E9E5" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FCF9F7", "bg300": "#FEFCFB" }
+  },
+  "rose-dust": {
+    "header": { "bg200": "#F0D3E0", "bg300": "#F7E9EF" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FEFAFC", "bg300": "#FFFDFE" }
+  },
+  "risd-blue": {
+    "header": { "bg200": "#90ACF8", "bg300": "#C7D6FB" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#F7FAFF", "bg300": "#FBFDFF" }
+  },
+  "celestial-sky": {
+    "header": { "bg200": "#82CFF5", "bg300": "#C1E7FA" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#F7FCFF", "bg300": "#FBFEFF" }
+  },
+  "midnight-penn": {
+    "header": { "bg200": "#D6D9F0", "bg300": "#EBEDF7" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#F7F8FB", "bg300": "#FBFBFD" }
+  },
+  "old-lace": {
+    "header": { "bg200": "#F7F2EA", "bg300": "#FBF8F4" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FCFAF6", "bg300": "#FEFDFB" }
+  },
+  "amber-dawn": {
+    "header": { "bg200": "#F8D688", "bg300": "#FCEBC4" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FFFBF3", "bg300": "#FFFDF9" }
+  },
+  "persimmon-glow": {
+    "header": { "bg200": "#FDA581", "bg300": "#FED2C0" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FFF9F6", "bg300": "#FFFCFA" }
+  },
+  "vivid-violet": {
+    "header": { "bg200": "#FBB9F3", "bg300": "#FDDCF9" },
+    "body": { "bg200": "#FFFFFF", "bg300": "#FFFFFF" },
+    "footer": { "bg200": "#FFFAFE", "bg300": "#FFFDFE" }
+  }
+}
