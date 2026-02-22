@@ -96,10 +96,12 @@ export function AuthGate({ children }: AuthGateProps) {
           className="hidden md:flex"
         >
           {/* Center content */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', textAlign: 'center' }}>
-            <KoreLogo width={112} variant="light" />
-            <p style={{ color: '#71717a', fontSize: '15px', marginTop: '8px', lineHeight: 1.6, maxWidth: '300px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', textAlign: 'center' }}>
+            <p style={{ color: '#f4f4f5', fontSize: '22px', fontWeight: 600, letterSpacing: '-0.02em', margin: 0, lineHeight: 1.3 }}>
               Beautiful emails.<br />Zero complexity.
+            </p>
+            <p style={{ color: '#52525b', fontSize: '14px', margin: 0 }}>
+              Kore Email Builder
             </p>
           </div>
 
@@ -139,14 +141,14 @@ export function AuthGate({ children }: AuthGateProps) {
           }}
         >
           {/* Mobile logo */}
-          <div className="flex md:hidden mb-8">
+          <div className="flex md:hidden" style={{ marginBottom: '32px' }}>
             <KoreLogo width={96} variant="light" />
           </div>
 
           <div style={{ width: '100%', maxWidth: '360px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {/* Heading */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <h1 style={{ fontFamily: 'DM Serif Display, Georgia, serif', fontSize: '24px', fontWeight: 700, color: '#f4f4f5', margin: 0, lineHeight: 1.2 }}>
+              <h1 style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '22px', fontWeight: 600, color: '#f4f4f5', margin: 0, lineHeight: 1.2, letterSpacing: '-0.02em' }}>
                 {isSignUp ? 'Create account' : 'Welcome back'}
               </h1>
               <p style={{ color: '#71717a', fontSize: '13px', margin: 0 }}>
