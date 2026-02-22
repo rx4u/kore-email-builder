@@ -171,7 +171,7 @@ export function PropertiesPanel({
         title="Header Properties"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType="header" defaultOpen={["content", "layout", "colors"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Content Section */}
           <PropertySection id="content" icon={Type} title="Content">
@@ -405,7 +405,7 @@ export function PropertiesPanel({
         title="Footer Properties"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType="footer" defaultOpen={["content", "layout", "colors"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Content Section */}
           <PropertySection id="content" icon={Type} title="Content">
@@ -675,7 +675,7 @@ export function PropertiesPanel({
         title="Divider"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["style", "layout", "colors"]}>
+        <PropertySections blockType={block.type} defaultOpen={["style", "layout", "colors"]}>
           <SectionGroup label="Style" showDivider={false}>
           {/* Style Section */}
           <PropertySection id="style" icon={Settings} title="Style">
@@ -740,7 +740,7 @@ export function PropertiesPanel({
         title="Text Block"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
           
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
             {/* Preset Styles */}
@@ -931,7 +931,7 @@ export function PropertiesPanel({
         title="Feature List"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Preset Styles */}
           <PresetStylesSection
@@ -1160,7 +1160,7 @@ export function PropertiesPanel({
         title="Feature with Screenshot"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Preset Styles */}
           <PresetStylesSection
@@ -1402,7 +1402,7 @@ export function PropertiesPanel({
         title="Code Snippet"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Preset Styles */}
           <PresetStylesSection
@@ -1581,7 +1581,7 @@ export function PropertiesPanel({
         title="Video Block"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Preset Styles */}
           <PresetStylesSection
@@ -1763,7 +1763,7 @@ export function PropertiesPanel({
         title="Two Column"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Preset Styles */}
           <PresetStylesSection
@@ -2043,7 +2043,7 @@ export function PropertiesPanel({
         title="Item Grid"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Preset Styles */}
           <PresetStylesSection
@@ -2253,7 +2253,7 @@ export function PropertiesPanel({
         title="Stats & Metrics"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Preset Styles */}
           <PresetStylesSection
@@ -2431,7 +2431,7 @@ export function PropertiesPanel({
         title="Multi-Update"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Preset Styles */}
           <PresetStylesSection
@@ -2611,7 +2611,7 @@ export function PropertiesPanel({
         title="Alert Block"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Preset Styles */}
           <PresetStylesSection
@@ -2801,7 +2801,7 @@ export function PropertiesPanel({
         title="Timeline"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "layout", "colors"]}>
+        <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Preset Styles */}
           <PresetStylesSection
@@ -3006,7 +3006,7 @@ export function PropertiesPanel({
         title="Image + Content"
         onClose={onClose}
       >
-        <PropertySections defaultOpen={["content", "image", "layout"]}>
+        <PropertySections blockType={block.type} defaultOpen={["content", "image", "layout"]}>
           <SectionGroup label={PANEL_SECTION_GROUPS.content.label} showDivider={false}>
           {/* Preset Styles - align with other content blocks */}
           <PresetStylesSection
