@@ -23,7 +23,8 @@ import {
 import {
   getBlockTitleStyles,
   getBlockDescriptionStyles,
-  shouldShow
+  shouldShow,
+  getCTAContainerStyles
 } from '../../lib/block-utilities';
 import { getThemeColors } from '../../lib/theme-catalog';
 import { getSwappedColors } from '../../lib/theme-application';
