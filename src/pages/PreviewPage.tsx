@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { generateEmailHTML } from '../lib/html-generator';
 
 interface Comment {
   id: string;
@@ -32,9 +33,11 @@ export function PreviewPage() {
         if (res.status === 404) { setPageState('notfound'); return; }
         if (!res.ok) { setPageState('error'); return; }
         const data = await res.json();
-        const emailHtml = data.email?.blocks_jsonb
-          ? JSON.stringify(data.email.blocks_jsonb)
-          : (data.html ?? '');
+        let emailHtml = data.html ?? '';
+        if (!emailHtml && data.email?.blocks_jsonb) {
+          const blocks = Array.isArray(data.email.blocks_jsonb) ? data.email.blocks_jsonb : [];
+          emailHtml = generateEmailHTML({ contentBlocks: blocks, headerConfig: {}, footerConfig: {} } as any, {});
+        }
         setHtml(emailHtml);
         setPageState('found');
       })
