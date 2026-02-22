@@ -14,9 +14,10 @@ interface DraftsPanelProps {
   onLoadDraft: (emailId: string, blocks: any[], subject: string) => void;
   currentEmailId?: string;
   onClose?: () => void;
+  userRole?: 'author' | 'reviewer' | 'admin';
 }
 
-export function DraftsPanel({ onLoadDraft, currentEmailId, onClose }: DraftsPanelProps) {
+export function DraftsPanel({ onLoadDraft, currentEmailId, onClose, userRole }: DraftsPanelProps) {
   const [drafts, setDrafts] = useState<DraftItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -213,6 +214,7 @@ export function DraftsPanel({ onLoadDraft, currentEmailId, onClose }: DraftsPane
                     <DraftStatusBadge
                       status={draft.status ?? 'draft'}
                       emailId={draft.id}
+                      userRole={userRole}
                       onStatusChange={(s) => handleStatusChange(draft.id, s)}
                     />
                     <span style={{ fontSize: 11, color: '#52525b' }}>

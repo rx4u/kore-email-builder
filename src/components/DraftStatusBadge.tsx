@@ -54,7 +54,7 @@ export function DraftStatusBadge({ status, emailId, userRole, onStatusChange }: 
   const actions: React.ReactNode[] = [];
 
   if (userRole && emailId) {
-    if (status === 'draft') {
+    if (status === 'draft' && (userRole === 'author' || userRole === 'admin')) {
       actions.push(
         <button key="submit" style={btnStyle} disabled={loading} onClick={() => transition('in_review')}>
           {loading && <Spinner />}
