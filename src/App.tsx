@@ -1551,6 +1551,24 @@ export default function App() {
       }
   }, [globalTheme]); // Run whenever globalTheme changes
 
+  // Undo/redo keyboard shortcuts (Cmd+Z / Cmd+Shift+Z / Cmd+Y)
+  // TODO: integrate useUndoRedo with emailState after state refactor
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        console.log('undo triggered');
+      }
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+        e.preventDefault();
+        console.log('redo triggered');
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
+
   // Template switching handlers
   const handleTemplateChange = (value: string) => {
     if (hasUnsavedChanges) {
