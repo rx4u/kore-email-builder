@@ -143,6 +143,7 @@ import { KnownIssues } from "./components/email-blocks/KnownIssues";
 import { RoadmapPreview } from "./components/email-blocks/RoadmapPreview";
 import { TeamAttribution } from "./components/email-blocks/TeamAttribution";
 import { IncidentRetro } from "./components/email-blocks/IncidentRetro";
+import { InsertionLine } from "./components/InsertionLine";
 
 
 // Email Template Wrapper – layout style (Copenhagen, New York, Oslo) controls radius and border
@@ -1151,22 +1152,16 @@ CompactDraggableBlockLibraryItem.displayName = 'CompactDraggableBlockLibraryItem
 // Drop zone indicator between blocks
 const DropIndicator = React.memo(({ id, isOver }: { id: string; isOver: boolean }) => {
   const { setNodeRef } = useDroppable({ id });
-  
+
   return (
-    <div 
+    <div
       ref={setNodeRef}
-      className={cn(
-        "transition-all duration-200 w-full",
-        isOver ? "h-16 my-2" : "h-10 my-1.5"
-      )}
+      style={{
+        height: isOver ? '2px' : '4px',
+        margin: isOver ? '2px 0' : '2px 0',
+      }}
     >
-      {isOver ? (
-        <div className="h-full w-full border-2 border-dashed border-black bg-black/5 flex items-center justify-center rounded-md">
-          <span className="text-sm font-semibold text-black">Drop block here</span>
-        </div>
-      ) : (
-        <div className="h-full w-full border-2 border-dashed border-border/30 hover:border-border/60 transition-all hover:bg-muted/20 rounded-md" />
-      )}
+      {isOver && <InsertionLine />}
     </div>
   );
 });
@@ -2945,9 +2940,28 @@ export default function App() {
 
         </div>
 
-      <DragOverlay>
+      <DragOverlay dropAnimation={null}>
         {activeId && activeId.startsWith('sidebar-') ? (
           <DragOverlayContent key={activeId} activeId={activeId} />
+        ) : activeId ? (
+          <div style={{ opacity: 0.6, pointerEvents: 'none', transform: 'scale(1.02)' }}>
+            {(() => {
+              const activeBlock = emailState.content.find(b => b.id === activeId);
+              if (!activeBlock) return null;
+              return (
+                <EmailTemplate
+                  mode="build"
+                  emailBackground={colorScheme.emailBackground}
+                  borderColor={colorScheme.border}
+                  emailWidth={globalTheme.emailWidth}
+                  innerBorderRadius={wrapperStyles.innerBorderRadius}
+                  innerBorder={wrapperStyles.innerBorder}
+                >
+                  {renderContentBlock(activeBlock, false, true)}
+                </EmailTemplate>
+              );
+            })()}
+          </div>
         ) : null}
       </DragOverlay>
       </DndContext>
