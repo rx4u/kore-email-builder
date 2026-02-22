@@ -145,7 +145,7 @@ function generateBlockHTML(block: any): string {
   const props = block.props != null ? { ...block.props, type: block.type } : block;
 
   // These blocks manage their own <tr><td> structure with custom bgColor
-  if (['hero', 'changelog', 'deprecation', 'metrics-snapshot', 'nps-rating'].includes(block.type)) {
+  if (['hero', 'changelog', 'deprecation', 'metrics-snapshot', 'nps-rating', 'bento-grid', 'feature-row', 'pull-quote', 'announcement-banner', 'card-grid', 'comparison-table', 'gif-demo', 'video-thumbnail', 'quick-poll', 'rsvp', 'feedback-prompt', 'known-issues', 'roadmap-preview', 'team-attribution', 'incident-retro'].includes(block.type)) {
     return generateBlockContent(props);
   }
 
@@ -400,6 +400,308 @@ function generateBlockContent(block: any): string {
         <td align="right" style="color:#71717a;font-size:11px;">${highLabel}</td>
       </tr>
     </table>
+  </td>
+</tr>`;
+    }
+
+
+    case 'bento-grid': {
+      const { cells = [], bgColor = '#09090b' } = block;
+      const [large, ...small] = cells;
+      const largeCell = large ? `
+        <td width="58%" style="background-color:${large.bgColor||'#18181b'};border-radius:12px;padding:28px;vertical-align:top;border:1px solid #27272a;">
+          ${large.icon ? `<div style="font-size:28px;margin-bottom:12px;">${large.icon}</div>` : ''}
+          <div style="color:#f4f4f5;font-size:18px;font-weight:700;margin-bottom:8px;">${large.title||''}</div>
+          <div style="color:#71717a;font-size:14px;line-height:1.6;">${large.description||''}</div>
+        </td>` : '';
+      const smallCells = small.slice(0,2).map((cell: any, i: number) => `
+        <tr><td style="background-color:${cell.bgColor||'#18181b'};border-radius:12px;padding:20px;border:1px solid #27272a;display:block;${i>0?'margin-top:12px;':''}">
+          ${cell.icon ? `<div style="font-size:22px;margin-bottom:8px;">${cell.icon}</div>` : ''}
+          <div style="color:#f4f4f5;font-size:14px;font-weight:700;margin-bottom:6px;">${cell.title||''}</div>
+          <div style="color:#71717a;font-size:13px;line-height:1.5;">${cell.description||''}</div>
+        </td></tr>`).join('');
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:24px 40px;font-family:'DM Sans',Arial,sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="12"><tbody><tr>
+      ${largeCell}
+      <td width="38%" style="vertical-align:top;">
+        <table width="100%" cellpadding="0" cellspacing="0"><tbody>${smallCells}</tbody></table>
+      </td>
+    </tr></tbody></table>
+  </td>
+</tr>`;
+    }
+
+    case 'feature-row': {
+      const { imageUrl, imageAlt = 'Feature image', imagePosition = 'left', title = '', description = '', ctaText, ctaUrl = '#', bgColor = '#09090b' } = block;
+      const imgTd = `<td width="48%" style="vertical-align:middle;padding:${imagePosition==='left'?'0 20px 0 0':'0 0 0 20px'};">
+        <img src="${imageUrl||'https://placehold.co/280x180/18181b/f4f4f5?text=Feature'}" alt="${imageAlt}" width="100%" style="display:block;border-radius:8px;max-width:280px;" />
+      </td>`;
+      const txtTd = `<td width="48%" style="vertical-align:middle;">
+        <div style="color:#f4f4f5;font-size:20px;font-weight:700;margin-bottom:12px;font-family:'DM Sans',Arial,sans-serif;">${title}</div>
+        <div style="color:#71717a;font-size:14px;line-height:1.7;margin-bottom:20px;font-family:'DM Sans',Arial,sans-serif;">${description}</div>
+        ${ctaText ? `<a href="${ctaUrl}" style="color:#f59e0b;font-size:14px;font-weight:600;text-decoration:none;font-family:'DM Sans',Arial,sans-serif;">${ctaText} &#8594;</a>` : ''}
+      </td>`;
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:32px 40px;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tbody><tr>
+      ${imagePosition==='left' ? imgTd+txtTd : txtTd+imgTd}
+    </tr></tbody></table>
+  </td>
+</tr>`;
+    }
+
+    case 'pull-quote': {
+      const { quoteText = '', authorName, authorTitle, accentColor = '#f59e0b', bgColor = '#09090b' } = block;
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:32px 40px;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tbody><tr>
+      <td width="4" style="background-color:${accentColor};border-radius:2px;"></td>
+      <td style="padding-left:24px;">
+        <div style="color:#f4f4f5;font-size:20px;font-style:italic;line-height:1.5;margin-bottom:16px;font-family:'DM Serif Display',Georgia,serif;">${quoteText}</div>
+        ${authorName ? `<div style="font-family:'DM Sans',Arial,sans-serif;">
+          <span style="color:#f4f4f5;font-size:14px;font-weight:700;">${authorName}</span>
+          ${authorTitle ? `<span style="color:#71717a;font-size:13px;"> &#8212; ${authorTitle}</span>` : ''}
+        </div>` : ''}
+      </td>
+    </tr></tbody></table>
+  </td>
+</tr>`;
+    }
+
+    case 'announcement-banner': {
+      const { icon = '📣', headline = '', bgColor = '#1c1a00', textColor = '#f59e0b' } = block;
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:16px 32px;text-align:center;font-family:'DM Sans',Arial,sans-serif;">
+    <span style="font-size:18px;margin-right:10px;">${icon}</span>
+    <span style="color:${textColor};font-size:14px;font-weight:600;">${headline}</span>
+  </td>
+</tr>`;
+    }
+
+    case 'card-grid': {
+      const { columns = 2, cards = [], bgColor = '#09090b' } = block;
+      const cellWidth = columns === 2 ? '48%' : '31%';
+      const rows: any[][] = [];
+      for (let i = 0; i < cards.length; i += columns) rows.push(cards.slice(i, i + columns));
+      const rowsHTML = rows.map((row: any[]) => `
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;"><tbody><tr>
+          ${row.map((card: any) => `<td width="${cellWidth}" style="background-color:#18181b;border:1px solid #27272a;border-radius:10px;padding:20px;vertical-align:top;">
+            ${card.icon ? `<div style="font-size:24px;margin-bottom:10px;">${card.icon}</div>` : ''}
+            <div style="color:#f4f4f5;font-size:14px;font-weight:700;margin-bottom:6px;">${card.title||''}</div>
+            <div style="color:#71717a;font-size:13px;line-height:1.6;">${card.description||''}</div>
+          </td>`).join('')}
+        </tr></tbody></table>`).join('');
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:32px 40px;font-family:'DM Sans',Arial,sans-serif;">
+    ${rowsHTML}
+  </td>
+</tr>`;
+    }
+
+    case 'comparison-table': {
+      const { columns: cols = [], rows: trows = [], bgColor = '#09090b' } = block;
+      const headerCells = cols.map((col: string, i: number) => `<th style="text-align:${i===0?'left':'center'};padding:10px 12px;border-bottom:1px solid #27272a;color:#71717a;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">${col}</th>`).join('');
+      const SYMBOLS: Record<string, string> = { yes: '✓', no: '✗', partial: '◐' };
+      const COLORS: Record<string, string> = { yes: '#22c55e', no: '#ef4444', partial: '#f59e0b' };
+      const bodyRows = trows.map((row: any) => `<tr>
+        <td style="padding:12px;border-bottom:1px solid #1a1a1a;color:#f4f4f5;font-size:14px;">${row.label||''}</td>
+        ${(row.values||[]).map((val: string) => `<td style="text-align:center;padding:12px;border-bottom:1px solid #1a1a1a;font-size:16px;color:${COLORS[val]||'#a1a1aa'};">${SYMBOLS[val]||val}</td>`).join('')}
+      </tr>`).join('');
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:32px 40px;font-family:'DM Sans',Arial,sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+      <thead><tr>${headerCells}</tr></thead>
+      <tbody>${bodyRows}</tbody>
+    </table>
+  </td>
+</tr>`;
+    }
+
+    case 'gif-demo': {
+      const { gifUrl, caption, ctaText, ctaUrl = '#', showOutlookWarning = true, bgColor = '#09090b' } = block;
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:32px 40px;text-align:center;font-family:'DM Sans',Arial,sans-serif;">
+    <img src="${gifUrl||'https://placehold.co/520x280/18181b/f4f4f5?text=GIF+Demo'}" alt="${caption||'Demo'}" width="100%" style="max-width:520px;display:block;margin:0 auto;border-radius:8px;border:1px solid #27272a;" />
+    ${caption ? `<div style="color:#71717a;font-size:13px;margin-top:12px;">${caption}</div>` : ''}
+    ${ctaText ? `<div style="margin-top:20px;"><a href="${ctaUrl}" style="display:inline-block;padding:12px 28px;background-color:#f59e0b;color:#09090b;text-decoration:none;border-radius:8px;font-weight:700;font-size:14px;">${ctaText}</a></div>` : ''}
+    ${showOutlookWarning ? `<div style="margin-top:12px;color:#52525b;font-size:11px;">* GIF plays in Gmail/Apple Mail. Outlook shows the first frame.</div>` : ''}
+  </td>
+</tr>`;
+    }
+
+    case 'video-thumbnail': {
+      const { videoUrl = '#', thumbnailUrl, caption, durationLabel, bgColor = '#09090b' } = block;
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:32px 40px;text-align:center;font-family:'DM Sans',Arial,sans-serif;">
+    <a href="${videoUrl}" style="display:inline-block;position:relative;text-decoration:none;">
+      <img src="${thumbnailUrl||'https://placehold.co/520x293/18181b/f4f4f5?text=Video+Thumbnail'}" alt="${caption||'Video'}" width="100%" style="max-width:520px;display:block;border-radius:8px;border:1px solid #27272a;" />
+    </a>
+    ${caption ? `<div style="color:#71717a;font-size:13px;margin-top:12px;">${caption}</div>` : ''}
+    ${durationLabel ? `<div style="margin-top:6px;color:#52525b;font-size:12px;font-family:'DM Mono',monospace;">${durationLabel}</div>` : ''}
+  </td>
+</tr>`;
+    }
+
+    case 'quick-poll': {
+      const { questionText = 'Which area should we prioritize next?', options = [], exportToken, blockId = 'poll', apiUrl = 'https://app.kore-email.com' } = block;
+      const btns = options.map((opt: any) => {
+        const href = exportToken ? `${apiUrl}/r/${exportToken}/${blockId}/${opt.id}` : '#';
+        return `<td style="padding:4px;"><a href="${href}" style="display:inline-block;padding:10px 20px;border-radius:100px;border:1px solid #f59e0b;color:#f59e0b;text-decoration:none;font-size:14px;font-weight:600;font-family:'DM Sans',Arial,sans-serif;">${opt.label||''}</a></td>`;
+      }).join('');
+      return `<tr>
+  <td align="center" style="padding:32px 40px;background-color:#09090b;font-family:'DM Sans',Arial,sans-serif;">
+    <div style="color:#f4f4f5;font-size:16px;font-weight:600;margin-bottom:20px;">${questionText}</div>
+    <table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr>${btns}</tr></table>
+  </td>
+</tr>`;
+    }
+
+    case 'rsvp': {
+      const { eventTitle = '', eventDate, eventLocation, yesLabel = "Yes, I'll attend", noLabel = "Can't make it", exportToken, blockId = 'rsvp', apiUrl = 'https://app.kore-email.com', bgColor = '#09090b' } = block;
+      const yesUrl = `${apiUrl}/r/${exportToken||'preview'}/${blockId}/yes`;
+      const noUrl = `${apiUrl}/r/${exportToken||'preview'}/${blockId}/no`;
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:32px 40px;text-align:center;font-family:'DM Sans',Arial,sans-serif;">
+    <div style="color:#f4f4f5;font-size:20px;font-weight:700;margin-bottom:8px;">${eventTitle}</div>
+    ${eventDate ? `<div style="color:#71717a;font-size:14px;margin-bottom:4px;">${eventDate}</div>` : ''}
+    ${eventLocation ? `<div style="color:#71717a;font-size:13px;margin-bottom:28px;">${eventLocation}</div>` : ''}
+    <table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr>
+      <td style="padding:0 6px;"><a href="${yesUrl}" style="display:inline-block;padding:12px 28px;background-color:#22c55e;color:#09090b;text-decoration:none;border-radius:8px;font-weight:700;font-size:14px;">${yesLabel}</a></td>
+      <td style="padding:0 6px;"><a href="${noUrl}" style="display:inline-block;padding:12px 28px;background-color:#27272a;color:#f4f4f5;text-decoration:none;border-radius:8px;font-weight:700;font-size:14px;">${noLabel}</a></td>
+    </tr></table>
+  </td>
+</tr>`;
+    }
+
+    case 'feedback-prompt': {
+      const { questionText = 'How do you feel about this release?', options = [], exportToken, blockId = 'feedback', apiUrl = 'https://app.kore-email.com' } = block;
+      const emojis = options.map((opt: any) => {
+        const href = exportToken ? `${apiUrl}/r/${exportToken}/${blockId}/${opt.value}` : '#';
+        return `<td style="padding:0 12px;text-align:center;">
+          <a href="${href}" style="text-decoration:none;display:inline-block;">
+            <div style="font-size:36px;margin-bottom:6px;">${opt.emoji||''}</div>
+            <div style="color:#71717a;font-size:12px;font-family:'DM Sans',Arial,sans-serif;">${opt.label||''}</div>
+          </a>
+        </td>`;
+      }).join('');
+      return `<tr>
+  <td align="center" style="padding:32px 40px;background-color:#09090b;font-family:'DM Sans',Arial,sans-serif;">
+    <div style="color:#f4f4f5;font-size:16px;font-weight:600;margin-bottom:20px;">${questionText}</div>
+    <table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr>${emojis}</tr></table>
+  </td>
+</tr>`;
+    }
+
+    case 'known-issues': {
+      const { headline = 'Known Issues', issues = [], bgColor = '#09090b' } = block;
+      const SEV: Record<string, { label: string; color: string; bg: string }> = {
+        p1: { label: 'P1', color: '#ef4444', bg: '#1c0a0a' },
+        p2: { label: 'P2', color: '#f59e0b', bg: '#1a1200' },
+        p3: { label: 'P3', color: '#3b82f6', bg: '#0a0a1c' },
+      };
+      const STA: Record<string, { label: string; color: string }> = {
+        investigating: { label: 'Investigating', color: '#f59e0b' },
+        in_progress: { label: 'In Progress', color: '#3b82f6' },
+        fixed: { label: 'Fixed', color: '#22c55e' },
+      };
+      const issueRows = issues.map((issue: any, i: number) => {
+        const sev = SEV[issue.severity] || SEV.p3;
+        const sta = STA[issue.status] || STA.investigating;
+        const borderB = i < issues.length - 1 ? 'border-bottom:1px solid #1a1a1a;' : '';
+        return `<tr>
+          <td style="padding:12px 0;${borderB}vertical-align:middle;">
+            <table width="100%" cellpadding="0" cellspacing="0"><tbody><tr>
+              <td width="40" style="vertical-align:middle;padding-right:12px;"><span style="display:inline-block;padding:2px 8px;border-radius:4px;background-color:${sev.bg};color:${sev.color};font-size:11px;font-weight:800;white-space:nowrap;">${sev.label}</span></td>
+              <td style="color:#f4f4f5;font-size:14px;">${issue.link ? `<a href="${issue.link}" style="color:#f4f4f5;text-decoration:underline;">${issue.title||''}</a>` : (issue.title||'')}</td>
+              <td style="text-align:right;color:${sta.color};font-size:12px;font-weight:600;white-space:nowrap;padding-left:12px;">${sta.label}</td>
+            </tr></tbody></table>
+          </td>
+        </tr>`;
+      }).join('');
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:32px 40px;font-family:'DM Sans',Arial,sans-serif;">
+    <div style="color:#71717a;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:20px;">${headline}</div>
+    <table width="100%" cellpadding="0" cellspacing="0"><tbody>${issueRows}</tbody></table>
+  </td>
+</tr>`;
+    }
+
+    case 'roadmap-preview': {
+      const { items = [], bgColor = '#09090b' } = block;
+      const STATUS: Record<string, { label: string; color: string; bg: string }> = {
+        now:   { label: 'Now',   color: '#22c55e', bg: '#052e16' },
+        next:  { label: 'Next',  color: '#3b82f6', bg: '#0a0a1c' },
+        later: { label: 'Later', color: '#71717a', bg: '#1a1a1a' },
+      };
+      const itemsHTML = items.map((item: any) => {
+        const cfg = STATUS[item.status] || STATUS.later;
+        return `<tr><td style="padding-bottom:14px;vertical-align:top;">
+          <table cellpadding="0" cellspacing="0"><tbody><tr>
+            <td style="vertical-align:top;padding-top:2px;padding-right:12px;"><span style="display:inline-block;padding:3px 10px;border-radius:100px;background-color:${cfg.bg};color:${cfg.color};font-size:11px;font-weight:700;white-space:nowrap;">${cfg.label}</span></td>
+            <td style="vertical-align:top;">
+              <div style="color:#f4f4f5;font-size:14px;font-weight:600;">${item.label||''}</div>
+              ${item.description ? `<div style="color:#71717a;font-size:12px;margin-top:2px;">${item.description}</div>` : ''}
+            </td>
+          </tr></tbody></table>
+        </td></tr>`;
+      }).join('');
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:32px 40px;font-family:'DM Sans',Arial,sans-serif;">
+    <div style="color:#71717a;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:20px;">Roadmap</div>
+    <table width="100%" cellpadding="0" cellspacing="0"><tbody>${itemsHTML}</tbody></table>
+  </td>
+</tr>`;
+    }
+
+    case 'team-attribution': {
+      const { headline = 'Built by', members = [], bgColor = '#09090b' } = block;
+      const membersHTML = members.map((m: any) => `<td style="padding-right:24px;vertical-align:middle;white-space:nowrap;">
+        <table cellpadding="0" cellspacing="0"><tbody><tr>
+          <td style="vertical-align:middle;padding-right:10px;">
+            ${m.avatarUrl ? `<img src="${m.avatarUrl}" alt="${m.name||''}" width="36" height="36" style="border-radius:50%;display:block;" />` : `<div style="width:36px;height:36px;border-radius:50%;background-color:#27272a;text-align:center;line-height:36px;color:#f4f4f5;font-size:14px;font-weight:700;">${(m.name||'?').charAt(0)}</div>`}
+          </td>
+          <td style="vertical-align:middle;">
+            <div style="color:#f4f4f5;font-size:13px;font-weight:600;">${m.name||''}</div>
+            <div style="color:#71717a;font-size:12px;">${m.role||''}</div>
+          </td>
+        </tr></tbody></table>
+      </td>`).join('');
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:24px 40px;font-family:'DM Sans',Arial,sans-serif;">
+    ${headline ? `<div style="color:#71717a;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;">${headline}</div>` : ''}
+    <table cellpadding="0" cellspacing="0"><tbody><tr>${membersHTML}</tr></tbody></table>
+  </td>
+</tr>`;
+    }
+
+    case 'incident-retro': {
+      const { incidentId = '', date = '', duration = '', impact = '', rootCause = '', fixApplied = '', actionItems = [], bgColor = '#09090b' } = block;
+      const fields = [
+        { label: 'Date', value: date },
+        { label: 'Duration', value: duration },
+        { label: 'Impact', value: impact },
+        { label: 'Root Cause', value: rootCause },
+        { label: 'Fix Applied', value: fixApplied },
+      ];
+      const fieldRows = fields.map(f => `<tr>
+        <td style="color:#71717a;font-size:13px;padding-bottom:12px;padding-right:24px;vertical-align:top;white-space:nowrap;">${f.label}</td>
+        <td style="color:#f4f4f5;font-size:13px;padding-bottom:12px;line-height:1.6;">${f.value}</td>
+      </tr>`).join('');
+      const actionHTML = actionItems.length > 0 ? `<div style="margin-top:8px;">
+        <div style="color:#71717a;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Action Items</div>
+        <ul style="margin:0;padding:0 0 0 20px;">
+          ${actionItems.map((item: string) => `<li style="color:#a1a1aa;font-size:13px;line-height:1.7;margin-bottom:4px;">${item}</li>`).join('')}
+        </ul>
+      </div>` : '';
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:32px 40px;font-family:'DM Sans',Arial,sans-serif;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+      <span style="display:inline-block;padding:4px 10px;border-radius:4px;background-color:#1c0a0a;color:#ef4444;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;">Incident Retro</span>
+      <span style="color:#71717a;font-size:13px;font-family:'DM Mono',monospace;">${incidentId}</span>
+    </div>
+    <table cellpadding="0" cellspacing="0"><tbody>${fieldRows}</tbody></table>
+    ${actionHTML}
   </td>
 </tr>`;
     }

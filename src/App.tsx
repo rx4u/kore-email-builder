@@ -28,7 +28,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { KoreLogo } from "./components/KoreLogo";
 import { DragDotsIcon } from "./components/DragDotsIcon";
 import agentConfigImg from "figma:asset/49248dbd165caf7144a4cb6ade908b8d36ee2839.png";
-import { Copy, Check, Circle, Trash2, GripVertical, Image, List, FileText, RefreshCw, Grid3x3, AlertTriangle, MessageSquare, Code, Columns, Video, BarChart3, Clock, Minus, Mail, ChevronLeft, ChevronRight, PanelLeftClose, PanelRightClose, PanelLeft, PanelRight, Settings, Info, Wrench, Eye, Zap } from 'lucide-react';
+import { Copy, Check, Circle, Trash2, GripVertical, Image, List, FileText, RefreshCw, Grid3x3, AlertTriangle, MessageSquare, Code, Columns, Video, BarChart3, Clock, Minus, Mail, ChevronLeft, ChevronRight, PanelLeftClose, PanelRightClose, PanelLeft, PanelRight, Settings, Info, Wrench, Eye, Zap, LayoutGrid, ArrowLeftRight, Quote, Megaphone, Table, Clapperboard, Play, PieChart, Calendar, Star, Bug, Map, Users, AlertOctagon } from 'lucide-react';
 import { Button } from "./components/ui/button";
 import { ScrollArea } from "./components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "./components/ui/tabs";
@@ -128,6 +128,21 @@ import { ChangelogBlock } from "./components/email-blocks/ChangelogBlock";
 import { DeprecationBlock } from "./components/email-blocks/DeprecationBlock";
 import { MetricsBlock } from "./components/email-blocks/MetricsBlock";
 import { NpsBlock } from "./components/email-blocks/NpsBlock";
+import { BentoGrid } from "./components/email-blocks/BentoGrid";
+import { FeatureRow } from "./components/email-blocks/FeatureRow";
+import { PullQuote } from "./components/email-blocks/PullQuote";
+import { AnnouncementBanner } from "./components/email-blocks/AnnouncementBanner";
+import { CardGrid } from "./components/email-blocks/CardGrid";
+import { ComparisonTable } from "./components/email-blocks/ComparisonTable";
+import { GifDemo } from "./components/email-blocks/GifDemo";
+import { VideoThumbnail } from "./components/email-blocks/VideoThumbnail";
+import { QuickPoll } from "./components/email-blocks/QuickPoll";
+import { RsvpBlock } from "./components/email-blocks/RsvpBlock";
+import { FeedbackPrompt } from "./components/email-blocks/FeedbackPrompt";
+import { KnownIssues } from "./components/email-blocks/KnownIssues";
+import { RoadmapPreview } from "./components/email-blocks/RoadmapPreview";
+import { TeamAttribution } from "./components/email-blocks/TeamAttribution";
+import { IncidentRetro } from "./components/email-blocks/IncidentRetro";
 
 
 // Email Template Wrapper – layout style (Copenhagen, New York, Oslo) controls radius and border
@@ -347,6 +362,96 @@ const contentBlockLibrary = [
     name: 'NPS Rating',
     description: '0-10 satisfaction scale with tokenized links',
     icon: MessageSquare
+  },
+  {
+    type: 'bento-grid' as ContentBlockType,
+    name: 'Bento Grid',
+    description: 'Asymmetric 3-cell dark card layout',
+    icon: LayoutGrid
+  },
+  {
+    type: 'feature-row' as ContentBlockType,
+    name: 'Feature Row',
+    description: 'Image left/right with text',
+    icon: ArrowLeftRight
+  },
+  {
+    type: 'pull-quote' as ContentBlockType,
+    name: 'Pull Quote',
+    description: 'Accent-border quote with attribution',
+    icon: Quote
+  },
+  {
+    type: 'announcement-banner' as ContentBlockType,
+    name: 'Announcement Banner',
+    description: 'Full-width highlighted message strip',
+    icon: Megaphone
+  },
+  {
+    type: 'card-grid' as ContentBlockType,
+    name: 'Card Grid',
+    description: '2 or 3 column feature cards',
+    icon: Grid3x3
+  },
+  {
+    type: 'comparison-table' as ContentBlockType,
+    name: 'Comparison Table',
+    description: 'Feature comparison with yes/no/partial cells',
+    icon: Table
+  },
+  {
+    type: 'gif-demo' as ContentBlockType,
+    name: 'GIF Demo',
+    description: 'Animated demo with Outlook fallback note',
+    icon: Clapperboard
+  },
+  {
+    type: 'video-thumbnail' as ContentBlockType,
+    name: 'Video Thumbnail',
+    description: 'Click-to-play video thumbnail with overlay',
+    icon: Play
+  },
+  {
+    type: 'quick-poll' as ContentBlockType,
+    name: 'Quick Poll',
+    description: 'Inline poll with tokenized option links',
+    icon: PieChart
+  },
+  {
+    type: 'rsvp' as ContentBlockType,
+    name: 'RSVP Block',
+    description: 'Event RSVP with Yes/No tokenized links',
+    icon: Calendar
+  },
+  {
+    type: 'feedback-prompt' as ContentBlockType,
+    name: 'Feedback Prompt',
+    description: 'Emoji reaction row for release feedback',
+    icon: Star
+  },
+  {
+    type: 'known-issues' as ContentBlockType,
+    name: 'Known Issues',
+    description: 'P1/P2/P3 issues with status indicators',
+    icon: Bug
+  },
+  {
+    type: 'roadmap-preview' as ContentBlockType,
+    name: 'Roadmap Preview',
+    description: 'Now/Next/Later roadmap status pills',
+    icon: Map
+  },
+  {
+    type: 'team-attribution' as ContentBlockType,
+    name: 'Team Attribution',
+    description: 'Team member list with avatar initials',
+    icon: Users
+  },
+  {
+    type: 'incident-retro' as ContentBlockType,
+    name: 'Incident Retro',
+    description: 'Structured post-incident report with action items',
+    icon: AlertOctagon
   }
 ];
 
@@ -2138,6 +2243,36 @@ export default function App() {
         return <MetricsBlock {...block.props} isEmailMode={isEmailMode} />;
       case 'nps-rating':
         return <NpsBlock {...block.props} isEmailMode={isEmailMode} />;
+      case 'bento-grid':
+        return <BentoGrid {...block.props} isEmailMode={isEmailMode} />;
+      case 'feature-row':
+        return <FeatureRow {...block.props} isEmailMode={isEmailMode} />;
+      case 'pull-quote':
+        return <PullQuote {...block.props} isEmailMode={isEmailMode} />;
+      case 'announcement-banner':
+        return <AnnouncementBanner {...block.props} isEmailMode={isEmailMode} />;
+      case 'card-grid':
+        return <CardGrid {...block.props} isEmailMode={isEmailMode} />;
+      case 'comparison-table':
+        return <ComparisonTable {...block.props} isEmailMode={isEmailMode} />;
+      case 'gif-demo':
+        return <GifDemo {...block.props} isEmailMode={isEmailMode} />;
+      case 'video-thumbnail':
+        return <VideoThumbnail {...block.props} isEmailMode={isEmailMode} />;
+      case 'quick-poll':
+        return <QuickPoll {...block.props} isEmailMode={isEmailMode} />;
+      case 'rsvp':
+        return <RsvpBlock {...block.props} isEmailMode={isEmailMode} />;
+      case 'feedback-prompt':
+        return <FeedbackPrompt {...block.props} isEmailMode={isEmailMode} />;
+      case 'known-issues':
+        return <KnownIssues {...block.props} isEmailMode={isEmailMode} />;
+      case 'roadmap-preview':
+        return <RoadmapPreview {...block.props} isEmailMode={isEmailMode} />;
+      case 'team-attribution':
+        return <TeamAttribution {...block.props} isEmailMode={isEmailMode} />;
+      case 'incident-retro':
+        return <IncidentRetro {...block.props} isEmailMode={isEmailMode} />;
       default:
         return null;
     }

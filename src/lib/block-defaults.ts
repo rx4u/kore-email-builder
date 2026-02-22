@@ -601,6 +601,179 @@ export const NPS_RATING_DEFAULTS = {
   isEmailMode: false,
 };
 
+
+export const BENTO_GRID_DEFAULTS = {
+  cells: [
+    { title: 'Ship faster', description: 'Automated deploy pipelines cut release time by 60%.', icon: '🚀', bgColor: '#18181b' },
+    { title: 'Zero downtime', description: 'Blue-green deployments with instant rollback.', icon: '⚡', bgColor: '#1c1a00' },
+    { title: 'Full visibility', description: 'Real-time logs, traces, and alerts in one place.', icon: '📊', bgColor: '#0a1a0a' },
+  ],
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const FEATURE_ROW_DEFAULTS = {
+  imageUrl: 'https://placehold.co/280x180/18181b/f4f4f5?text=Feature',
+  imageAlt: 'Feature image',
+  imagePosition: 'left' as 'left' | 'right',
+  title: 'Ship with confidence',
+  description: 'Automated testing, staging environments, and one-click rollback give your team the safety net to move fast.',
+  ctaText: 'Learn more',
+  ctaUrl: '#',
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const PULL_QUOTE_DEFAULTS = {
+  quoteText: "'This is the most impactful release we've shipped in the last two years.'",
+  authorName: 'Sarah Chen',
+  authorTitle: 'VP of Engineering',
+  accentColor: '#f59e0b',
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const ANNOUNCEMENT_BANNER_DEFAULTS = {
+  icon: '📣',
+  headline: 'Scheduled maintenance: Sunday, March 2 from 2-4 AM UTC',
+  bgColor: '#1c1a00',
+  textColor: '#f59e0b',
+  isEmailMode: false,
+};
+
+export const CARD_GRID_DEFAULTS = {
+  columns: 2 as 2 | 3,
+  cards: [
+    { icon: '🔐', title: 'SSO Integration', description: 'Connect your identity provider in under 5 minutes.' },
+    { icon: '🔔', title: 'Smart Alerts', description: 'Get notified only when it matters, not for every event.' },
+    { icon: '📈', title: 'Usage Analytics', description: 'Track team adoption and feature usage over time.' },
+    { icon: '🛡️', title: 'Audit Logs', description: 'Full activity history for compliance and debugging.' },
+  ],
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const COMPARISON_TABLE_DEFAULTS = {
+  columns: ['Feature', 'Kore v1', 'Competitor A', 'Competitor B'],
+  rows: [
+    { label: 'Internal comms blocks', values: ['yes', 'no', 'no'] },
+    { label: 'Changelog block', values: ['yes', 'no', 'no'] },
+    { label: 'Collaboration', values: ['yes', 'partial', 'yes'] },
+    { label: 'Gmail-safe export', values: ['yes', 'yes', 'partial'] },
+  ],
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const GIF_DEMO_DEFAULTS = {
+  gifUrl: 'https://placehold.co/520x280/18181b/f4f4f5?text=GIF+Demo',
+  caption: 'Watch the new onboarding flow in action',
+  ctaText: 'Try it yourself',
+  ctaUrl: '#',
+  showOutlookWarning: true,
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const VIDEO_THUMBNAIL_DEFAULTS = {
+  videoUrl: '#',
+  thumbnailUrl: 'https://placehold.co/520x293/18181b/f4f4f5?text=Video+Thumbnail',
+  caption: 'Product walkthrough — 4 minutes',
+  durationLabel: '4:12',
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const QUICK_POLL_DEFAULTS = {
+  questionText: 'Which area should we prioritize next?',
+  options: [
+    { id: 'perf', label: 'Performance' },
+    { id: 'dx', label: 'Developer Experience' },
+    { id: 'docs', label: 'Documentation' },
+    { id: 'mobile', label: 'Mobile App' },
+  ],
+  exportToken: undefined as string | undefined,
+  blockId: 'poll',
+  apiUrl: 'https://app.kore-email.com',
+  isEmailMode: false,
+};
+
+export const RSVP_DEFAULTS = {
+  eventTitle: 'Q1 Engineering All-Hands',
+  eventDate: 'Thursday, March 6 · 2:00–3:30 PM UTC',
+  eventLocation: 'Zoom (link in invite)',
+  yesLabel: "Yes, I'll attend",
+  noLabel: "Can't make it",
+  exportToken: undefined as string | undefined,
+  blockId: 'rsvp',
+  apiUrl: 'https://app.kore-email.com',
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const FEEDBACK_PROMPT_DEFAULTS = {
+  questionText: 'How do you feel about this release?',
+  options: [
+    { emoji: '😞', label: 'Disappointed', value: 'disappointed' },
+    { emoji: '😐', label: 'Neutral', value: 'neutral' },
+    { emoji: '🙂', label: 'Good', value: 'good' },
+    { emoji: '🤩', label: 'Love it!', value: 'love' },
+  ],
+  exportToken: undefined as string | undefined,
+  blockId: 'feedback',
+  apiUrl: 'https://app.kore-email.com',
+  isEmailMode: false,
+};
+
+export const KNOWN_ISSUES_DEFAULTS = {
+  headline: 'Known Issues',
+  issues: [
+    { severity: 'p1' as const, title: 'Dashboard load fails with SSO enabled', status: 'investigating' as const, link: '#' },
+    { severity: 'p2' as const, title: 'Export CSV shows incorrect date format', status: 'in_progress' as const },
+    { severity: 'p3' as const, title: 'Dark mode toggle resets on refresh', status: 'fixed' as const },
+  ],
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const ROADMAP_PREVIEW_DEFAULTS = {
+  items: [
+    { label: 'AI-powered email subject suggestions', status: 'now' as const, description: 'Launching in v2.1' },
+    { label: 'Multi-language support', status: 'next' as const, description: 'In design review' },
+    { label: 'Salesforce integration', status: 'later' as const },
+    { label: 'Mobile app (iOS + Android)', status: 'later' as const },
+  ],
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const TEAM_ATTRIBUTION_DEFAULTS = {
+  headline: 'Built by',
+  members: [
+    { name: 'Priya Mehta', role: 'Engineering Lead' },
+    { name: 'James Liu', role: 'Product Design' },
+    { name: 'Anika Osei', role: 'Backend Engineering' },
+  ],
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const INCIDENT_RETRO_DEFAULTS = {
+  incidentId: 'INC-2024-047',
+  date: 'February 15, 2026',
+  duration: '43 minutes',
+  impact: 'API gateway returning 503 for ~12% of requests in us-east-1',
+  rootCause: 'Memory leak in connection pool after deploy of v3.2.1',
+  fixApplied: 'Rolled back to v3.2.0, deployed hotfix v3.2.2 with pool limits',
+  actionItems: [
+    'Add connection pool metrics to alerting dashboard',
+    'Require load test in staging before next deploy',
+    'Update runbook with rollback procedure',
+  ],
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
 export const HERO_DEFAULTS = {
   badge: 'New Release',
   showBadge: true,
@@ -648,6 +821,21 @@ export const BLOCK_DEFAULTS = {
   deprecation: DEPRECATION_DEFAULTS,
   'metrics-snapshot': METRICS_SNAPSHOT_DEFAULTS,
   'nps-rating': NPS_RATING_DEFAULTS,
+  'bento-grid': BENTO_GRID_DEFAULTS,
+  'feature-row': FEATURE_ROW_DEFAULTS,
+  'pull-quote': PULL_QUOTE_DEFAULTS,
+  'announcement-banner': ANNOUNCEMENT_BANNER_DEFAULTS,
+  'card-grid': CARD_GRID_DEFAULTS,
+  'comparison-table': COMPARISON_TABLE_DEFAULTS,
+  'gif-demo': GIF_DEMO_DEFAULTS,
+  'video-thumbnail': VIDEO_THUMBNAIL_DEFAULTS,
+  'quick-poll': QUICK_POLL_DEFAULTS,
+  'rsvp': RSVP_DEFAULTS,
+  'feedback-prompt': FEEDBACK_PROMPT_DEFAULTS,
+  'known-issues': KNOWN_ISSUES_DEFAULTS,
+  'roadmap-preview': ROADMAP_PREVIEW_DEFAULTS,
+  'team-attribution': TEAM_ATTRIBUTION_DEFAULTS,
+  'incident-retro': INCIDENT_RETRO_DEFAULTS,
 } as const;
 
 // ============================================================================

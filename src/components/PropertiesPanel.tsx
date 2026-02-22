@@ -116,7 +116,22 @@ export type ContentBlockType =
   | 'changelog'
   | 'deprecation'
   | 'metrics-snapshot'
-  | 'nps-rating';
+  | 'nps-rating'
+  | 'bento-grid'
+  | 'feature-row'
+  | 'pull-quote'
+  | 'announcement-banner'
+  | 'card-grid'
+  | 'comparison-table'
+  | 'gif-demo'
+  | 'video-thumbnail'
+  | 'quick-poll'
+  | 'rsvp'
+  | 'feedback-prompt'
+  | 'known-issues'
+  | 'roadmap-preview'
+  | 'team-attribution'
+  | 'incident-retro';
 
 export interface ContentBlock {
   id: string;
