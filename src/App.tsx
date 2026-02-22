@@ -26,6 +26,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { KoreLogo } from "./components/KoreLogo";
+import { BottomBar } from "./components/BottomBar";
 import { DragDotsIcon } from "./components/DragDotsIcon";
 import agentConfigImg from "figma:asset/49248dbd165caf7144a4cb6ade908b8d36ee2839.png";
 import { Copy, Check, Circle, Trash2, GripVertical, Image, List, FileText, RefreshCw, Grid3x3, AlertTriangle, MessageSquare, Code, Columns, Video, BarChart3, Clock, Minus, Mail, ChevronLeft, ChevronRight, PanelLeftClose, PanelRightClose, PanelLeft, PanelRight, Settings, Info, Wrench, Eye, Zap, LayoutGrid, ArrowLeftRight, Quote, Megaphone, Table, Clapperboard, Play, PieChart, Calendar, Star, Bug, Map, Users, AlertOctagon } from 'lucide-react';
@@ -1378,6 +1379,9 @@ export default function App() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [currentEmailId, setCurrentEmailId] = useState<string | undefined>(undefined);
   const [showDraftsPanel, setShowDraftsPanel] = useState(false);
+  const [sizeKB, setSizeKB] = useState(0);
+  const [savedAt, setSavedAt] = useState<Date | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -2348,6 +2352,26 @@ export default function App() {
     [emailState, globalTheme]
   );
 
+  // Debounced 102KB size calculation
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const html = generateEmailHTML(emailState, globalTheme);
+      const bytes = new TextEncoder().encode(html).length;
+      setSizeKB(Math.round((bytes / 1024) * 10) / 10);
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [emailState, globalTheme]);
+
+  // Track auto-save state (piggyback on browser-persistence debounce)
+  useEffect(() => {
+    setSaving(true);
+    const t = setTimeout(() => {
+      setSaving(false);
+      setSavedAt(new Date());
+    }, 700);
+    return () => clearTimeout(t);
+  }, [emailState, globalTheme]);
+
   return (
     <TooltipProvider delayDuration={300}>
       <div 
@@ -3182,6 +3206,12 @@ export default function App() {
         </AlertDialogContent>
       </AlertDialog>
 
+      <BottomBar
+        sizeKB={sizeKB}
+        blockCount={emailState.content.length}
+        savedAt={savedAt}
+        saving={saving}
+      />
       </div>
     </TooltipProvider>
   );
