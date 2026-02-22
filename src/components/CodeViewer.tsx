@@ -303,7 +303,7 @@ export function CodeViewer({ code, subject = 'Email Preview' }: CodeViewerProps)
               size="sm"
               onClick={handleCopyForGmail}
               disabled={gmailLoading}
-              className="gap-1.5 h-9 text-xs bg-amber-500 hover:bg-amber-600 text-white border-0"
+              className="gap-1.5 h-9 text-xs bg-primary hover:bg-primary/80 text-white border-0"
               title="Copy inlined HTML for pasting into Gmail"
             >
               {gmailLoading

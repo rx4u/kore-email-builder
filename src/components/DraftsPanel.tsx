@@ -93,8 +93,8 @@ export function DraftsPanel({ onLoadDraft, currentEmailId, onClose, userRole }: 
     width: 360,
     maxWidth: '100vw',
     height: '100%',
-    background: '#09090b',
-    borderRight: '1px solid #27272a',
+    background: 'var(--background)',
+    borderRight: '1px solid var(--border)',
     display: 'flex',
     flexDirection: 'column',
     fontFamily: 'DM Sans, sans-serif',
@@ -107,14 +107,14 @@ export function DraftsPanel({ onLoadDraft, currentEmailId, onClose, userRole }: 
       <div style={overlay} onClick={onClose} />
       <div style={sidebar}>
         {/* Header */}
-        <div style={{ padding: '16px 20px', borderBottom: '1px solid #27272a', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontWeight: 700, fontSize: 15, color: '#f4f4f5' }}>Drafts</span>
+        <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontWeight: 700, fontSize: 15, color: 'var(--foreground)' }}>Drafts</span>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <button
               onClick={() => { onLoadDraft('', [], 'Untitled Email'); onClose?.(); }}
               style={{
-                background: '#f59e0b',
-                color: '#09090b',
+                background: 'var(--primary)',
+                color: 'var(--primary-foreground)',
                 border: 'none',
                 borderRadius: 7,
                 padding: '6px 14px',
@@ -164,16 +164,16 @@ export function DraftsPanel({ onLoadDraft, currentEmailId, onClose, userRole }: 
                     style={{
                       padding: '12px 20px',
                       cursor: isLoadingThis ? 'wait' : 'pointer',
-                      borderLeft: isActive ? '3px solid #f59e0b' : '3px solid transparent',
-                      background: isActive ? 'rgba(245,158,11,0.06)' : 'transparent',
+                      borderLeft: isActive ? '3px solid var(--foreground)' : '3px solid transparent',
+                      background: isActive ? 'rgba(24,24,27,0.12)' : 'transparent',
                       opacity: isDeletingThis ? 0.4 : 1,
                       transition: 'background 0.15s, border-color 0.15s',
-                      borderBottom: '1px solid #18181b',
+                      borderBottom: '1px solid var(--border)',
                       display: 'flex',
                       flexDirection: 'column',
                       gap: 6,
                     }}
-                    onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = '#18181b'; }}
+                    onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'var(--muted)'; }}
                     onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>

@@ -61,15 +61,15 @@ function UserAvatar({ user }: { user: TopBarUser }) {
 }
 
 const actionBtnStyle: React.CSSProperties = {
-  display: 'flex', alignItems: 'center', gap: '5px',
-  padding: '4px 10px', borderRadius: '6px',
-  border: '1px solid #e4e4e7', background: 'transparent',
-  color: '#18181b', fontSize: '12px', fontWeight: 500,
+  display: 'flex', alignItems: 'center', gap: '6px',
+  padding: '6px 14px', borderRadius: '8px',
+  border: '1px solid var(--border)', background: 'transparent',
+  color: 'var(--foreground)', fontSize: '14px', fontWeight: 500,
   cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
-  height: '28px',
-  transition: 'background 150ms',
+  height: '40px',
+  transition: 'all 150ms',
 };
-const hoverIn = (e: React.MouseEvent<HTMLButtonElement>) => { e.currentTarget.style.background = '#f4f4f5'; };
+const hoverIn = (e: React.MouseEvent<HTMLButtonElement>) => { e.currentTarget.style.background = 'var(--muted)'; };
 const hoverOut = (e: React.MouseEvent<HTMLButtonElement>) => { e.currentTarget.style.background = 'transparent'; };
 
 export function TopBar({
@@ -94,11 +94,11 @@ export function TopBar({
 
   return (
     <>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%', gap: '12px', padding: '0 16px 0 0' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%', gap: '16px', padding: '0 16px' }}>
         {/* Left: Logo + divider + Subject */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 }}>
-          <KoreLogo width={96} variant="auto" />
-          <div style={{ width: '1px', height: '20px', background: '#e4e4e7', flexShrink: 0 }} />
+          <KoreLogo width={88} variant="auto" />
+          <div style={{ width: '1px', height: '20px', background: 'var(--border)', flexShrink: 0, opacity: 0.6 }} />
           <input
             type="text"
             value={subject}
@@ -108,14 +108,15 @@ export function TopBar({
               background: 'transparent',
               border: 'none',
               outline: 'none',
-              fontSize: '13px',
+              fontSize: '14px',
               fontWeight: 500,
-              color: '#18181b',
+              color: 'var(--foreground)',
               flex: 1,
               minWidth: 0,
               fontFamily: 'DM Sans, sans-serif',
-              padding: '3px 6px',
-              borderRadius: '4px',
+              padding: '6px 10px',
+              borderRadius: '6px',
+              height: '40px',
               transition: 'background 150ms',
             }}
             onFocus={(e) => { e.target.style.background = 'rgba(0,0,0,0.04)'; }}
@@ -124,10 +125,10 @@ export function TopBar({
         </div>
 
         {/* Center: Auto-save status */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#71717a', fontFamily: 'DM Mono, monospace', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: 'var(--muted-foreground)', fontFamily: 'DM Mono, monospace', flexShrink: 0 }}>
           {saving ? (
             <>
-              <Clock size={11} style={{ color: '#f59e0b' }} />
+              <Clock size={11} style={{ color: '#a1a1aa' }} />
               <span>Saving...</span>
             </>
           ) : savedAt ? (
@@ -136,12 +137,12 @@ export function TopBar({
               <span>Saved {savedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
             </>
           ) : (
-            <span style={{ color: '#a1a1aa' }}>Not saved</span>
+            <span style={{ opacity: 0.5 }}>Not saved</span>
           )}
         </div>
 
         {/* Right: Action buttons + user avatar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
           <button onClick={() => setShareOpen(true)} style={actionBtnStyle} onMouseEnter={hoverIn} onMouseLeave={hoverOut} title="Share email">
             <Share2 size={13} />
             Share
@@ -158,7 +159,7 @@ export function TopBar({
           )}
 
           {/* Vertical divider before avatar */}
-          <div style={{ width: '1px', height: '20px', background: '#e4e4e7', margin: '0 4px', flexShrink: 0 }} />
+          <div style={{ width: '1px', height: '20px', background: 'var(--border)', margin: '0 2px', flexShrink: 0, opacity: 0.6 }} />
 
           {/* User profile dropdown */}
           {user ? (
@@ -175,7 +176,7 @@ export function TopBar({
                     display: 'flex',
                     alignItems: 'center',
                   }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 0 2px #f59e0b80'; }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 0 2px #18181b80'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'; }}
                   title={user.name || user.email}
                 >

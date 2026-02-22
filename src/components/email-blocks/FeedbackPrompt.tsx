@@ -17,6 +17,15 @@ export interface FeedbackPromptProps {
   isEmailMode?: boolean;
 }
 
+function isDarkBg(hex: string): boolean {
+  const h = hex.replace('#', '');
+  if (h.length < 6) return true;
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return (r * 299 + g * 587 + b * 114) / 1000 < 128;
+}
+
 export const FeedbackPrompt = React.memo(function FeedbackPrompt({
   questionText = 'How do you feel about this release?',
   options = [
@@ -32,6 +41,9 @@ export const FeedbackPrompt = React.memo(function FeedbackPrompt({
   textColor = '#09090b',
   isEmailMode = false,
 }: FeedbackPromptProps) {
+  const dark = isDarkBg(bgColor);
+  const textMuted = dark ? '#71717a' : '#52525b';
+
   return (
     <tr>
       <td align="center" style={{ padding: '32px 40px', backgroundColor: bgColor, fontFamily: 'DM Sans, Arial, sans-serif' }}>
@@ -42,12 +54,12 @@ export const FeedbackPrompt = React.memo(function FeedbackPrompt({
               <a key={opt.value} href={`${apiUrl}/r/${exportToken}/${blockId}/${opt.value}`}
                 style={{ textDecoration: 'none', textAlign: 'center', display: 'inline-block' }}>
                 <div style={{ fontSize: '36px', marginBottom: '6px' }}>{opt.emoji}</div>
-                <div style={{ color: '#71717a', fontSize: '12px' }}>{opt.label}</div>
+                <div style={{ color: textMuted, fontSize: '12px' }}>{opt.label}</div>
               </a>
             ) : (
               <div key={opt.value} style={{ textAlign: 'center', cursor: 'pointer' }}>
                 <div style={{ fontSize: '36px', marginBottom: '6px' }}>{opt.emoji}</div>
-                <div style={{ color: '#71717a', fontSize: '12px' }}>{opt.label}</div>
+                <div style={{ color: textMuted, fontSize: '12px' }}>{opt.label}</div>
               </div>
             )
           ))}

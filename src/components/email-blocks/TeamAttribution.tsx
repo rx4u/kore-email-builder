@@ -10,6 +10,7 @@ export interface TeamAttributionProps {
   headline?: string;
   members?: TeamMember[];
   bgColor?: string;
+  textColor?: string;
   isEmailMode?: boolean;
 }
 
@@ -30,12 +31,13 @@ export const TeamAttribution = React.memo(function TeamAttribution({
     { name: 'Anika Osei', role: 'Backend Engineering' },
   ],
   bgColor = '#ffffff',
+  textColor,
   isEmailMode = false,
 }: TeamAttributionProps) {
   const dark = isDarkBg(bgColor);
   const avatarBg = dark ? '#27272a' : '#e4e4e7';
   const avatarText = dark ? '#f4f4f5' : '#09090b';
-  const nameColor = dark ? '#f4f4f5' : '#09090b';
+  const nameColor = textColor || (dark ? '#f4f4f5' : '#09090b');
   const roleColor = dark ? '#71717a' : '#52525b';
   const headlineColor = dark ? '#71717a' : '#52525b';
 

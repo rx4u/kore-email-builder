@@ -51,20 +51,20 @@ export function ShareDialog({ open, onClose, emailId }: ShareDialogProps) {
             position: 'fixed',
             top: '50%', left: '50%',
             transform: 'translate(-50%, -50%)',
-            background: '#18181b',
-            border: '1px solid #27272a',
+            background: 'var(--popover)',
+            border: '1px solid var(--border)',
             borderRadius: '12px',
             padding: '24px',
             width: '480px',
             maxWidth: 'calc(100vw - 32px)',
             zIndex: 51,
             fontFamily: 'DM Sans, sans-serif',
-            color: '#f4f4f5',
+            color: 'var(--foreground)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Link size={18} color="#f59e0b" />
+              <Link size={18} color="currentColor" />
               <Dialog.Title style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>
                 Share Preview
               </Dialog.Title>
@@ -74,7 +74,7 @@ export function ShareDialog({ open, onClose, emailId }: ShareDialogProps) {
                 onClick={onClose}
                 style={{
                   background: 'transparent', border: 'none', cursor: 'pointer',
-                  color: '#71717a', padding: '4px', borderRadius: '6px',
+                  color: 'var(--muted-foreground)', padding: '4px', borderRadius: '6px',
                   display: 'flex', alignItems: 'center',
                 }}
               >
@@ -84,7 +84,7 @@ export function ShareDialog({ open, onClose, emailId }: ShareDialogProps) {
           </div>
 
           {loading && (
-            <div style={{ color: '#71717a', fontSize: '14px', textAlign: 'center', padding: '16px 0' }}>
+            <div style={{ color: 'var(--muted-foreground)', fontSize: '14px', textAlign: 'center', padding: '16px 0' }}>
               Generating link...
             </div>
           )}
@@ -101,7 +101,7 @@ export function ShareDialog({ open, onClose, emailId }: ShareDialogProps) {
           {url && !loading && (
             <>
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ fontSize: '12px', color: '#71717a', display: 'block', marginBottom: '6px' }}>
+                <label style={{ fontSize: '12px', color: 'var(--muted-foreground)', display: 'block', marginBottom: '6px' }}>
                   Preview URL
                 </label>
                 <div style={{ display: 'flex', gap: '8px' }}>
@@ -110,8 +110,8 @@ export function ShareDialog({ open, onClose, emailId }: ShareDialogProps) {
                     value={url}
                     style={{
                       flex: 1, padding: '9px 12px',
-                      background: '#09090b', border: '1px solid #27272a',
-                      borderRadius: '8px', color: '#a1a1aa',
+                      background: 'var(--background)', border: '1px solid var(--border)',
+                      borderRadius: '8px', color: 'var(--muted-foreground)',
                       fontSize: '13px', fontFamily: 'DM Mono, monospace',
                       outline: 'none', overflow: 'hidden', textOverflow: 'ellipsis',
                     }}
@@ -122,9 +122,9 @@ export function ShareDialog({ open, onClose, emailId }: ShareDialogProps) {
                     style={{
                       display: 'flex', alignItems: 'center', gap: '6px',
                       padding: '9px 14px',
-                      background: copied ? '#16a34a' : '#f59e0b',
+                      background: copied ? '#16a34a' : 'var(--foreground)',
                       border: 'none', borderRadius: '8px',
-                      color: '#09090b', fontWeight: 600, fontSize: '13px',
+                      color: 'var(--background)', fontWeight: 600, fontSize: '13px',
                       cursor: 'pointer', whiteSpace: 'nowrap',
                       transition: 'background 0.15s',
                     }}

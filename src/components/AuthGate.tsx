@@ -177,7 +177,7 @@ export function AuthGate({ children }: AuthGateProps) {
               }}
               onMouseEnter={e => {
                 (e.currentTarget as HTMLButtonElement).style.background = '#1f1f22';
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 0 2px #f59e0b40';
+                (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 0 2px #18181b40';
               }}
               onMouseLeave={e => {
                 (e.currentTarget as HTMLButtonElement).style.background = '#18181b';
@@ -217,7 +217,7 @@ export function AuthGate({ children }: AuthGateProps) {
                   width: '100%',
                   boxSizing: 'border-box',
                 }}
-                onFocus={e => (e.target.style.borderColor = '#f59e0b')}
+                onFocus={e => (e.target.style.borderColor = '#18181b')}
                 onBlur={e => (e.target.style.borderColor = '#27272a')}
               />
               <div style={{ position: 'relative' }}>
@@ -241,7 +241,7 @@ export function AuthGate({ children }: AuthGateProps) {
                     width: '100%',
                     boxSizing: 'border-box',
                   }}
-                  onFocus={e => (e.target.style.borderColor = '#f59e0b')}
+                  onFocus={e => (e.target.style.borderColor = '#18181b')}
                   onBlur={e => (e.target.style.borderColor = '#27272a')}
                 />
                 <button
@@ -289,8 +289,8 @@ export function AuthGate({ children }: AuthGateProps) {
               style={{
                 height: '40px',
                 width: '100%',
-                background: submitting ? '#b45309' : '#f59e0b',
-                color: '#09090b',
+                background: submitting ? '#27272a' : '#18181b',
+                color: '#ffffff',
                 border: 'none',
                 borderRadius: '8px',
                 fontWeight: 600,
@@ -299,8 +299,8 @@ export function AuthGate({ children }: AuthGateProps) {
                 transition: 'all 150ms',
                 fontFamily: 'DM Sans, sans-serif',
               }}
-              onMouseEnter={e => { if (!submitting) (e.currentTarget as HTMLButtonElement).style.background = '#d97706'; }}
-              onMouseLeave={e => { if (!submitting) (e.currentTarget as HTMLButtonElement).style.background = '#f59e0b'; }}
+              onMouseEnter={e => { if (!submitting) (e.currentTarget as HTMLButtonElement).style.background = '#27272a'; }}
+              onMouseLeave={e => { if (!submitting) (e.currentTarget as HTMLButtonElement).style.background = '#18181b'; }}
               onMouseDown={e => { if (!submitting) (e.currentTarget as HTMLButtonElement).style.transform = 'scale(0.98)'; }}
               onMouseUp={e => { if (!submitting) (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)'; }}
             >
@@ -312,7 +312,7 @@ export function AuthGate({ children }: AuthGateProps) {
               {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
               <span
                 onClick={handleModeToggle}
-                style={{ color: '#f59e0b', fontWeight: 500, cursor: 'pointer', textDecoration: 'none' }}
+                style={{ color: '#e4e4e7', fontWeight: 500, cursor: 'pointer', textDecoration: 'none' }}
                 onMouseEnter={e => ((e.currentTarget as HTMLSpanElement).style.textDecoration = 'underline')}
                 onMouseLeave={e => ((e.currentTarget as HTMLSpanElement).style.textDecoration = 'none')}
               >

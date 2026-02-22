@@ -118,7 +118,7 @@ export function PreviewPage() {
           <div style={{
             width: '32px', height: '32px',
             border: '3px solid #27272a',
-            borderTopColor: '#f59e0b',
+            borderTopColor: '#a1a1aa',
             borderRadius: '50%',
             animation: 'spin 0.8s linear infinite',
           }} />
@@ -243,8 +243,8 @@ export function PreviewPage() {
               style={{
                 alignSelf: 'flex-end',
                 padding: '9px 20px',
-                background: submitting || !message.trim() ? '#3f3f46' : '#f59e0b',
-                color: submitting || !message.trim() ? '#71717a' : '#09090b',
+                background: submitting || !message.trim() ? '#3f3f46' : '#18181b',
+                color: submitting || !message.trim() ? '#71717a' : '#ffffff',
                 border: 'none', borderRadius: '8px',
                 fontWeight: 600, fontSize: '13px',
                 cursor: submitting || !message.trim() ? 'not-allowed' : 'pointer',
@@ -271,7 +271,7 @@ export function PreviewPage() {
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 600, color: '#f59e0b' }}>
+                    <span style={{ fontSize: '13px', fontWeight: 600, color: '#e4e4e7' }}>
                       {c.author_name}
                     </span>
                     <span style={{ fontSize: '11px', color: '#52525b' }}>

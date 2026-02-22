@@ -564,7 +564,8 @@ export const CHANGELOG_DEFAULTS = {
     { type: 'fix' as const, items: ['Fixed broken pagination on mobile'] },
     { type: 'breaking' as const, items: ['Removed legacy v1 API endpoints'] },
   ],
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
+  textColor: '#09090b',
   isEmailMode: false,
 };
 
@@ -587,7 +588,7 @@ export const METRICS_SNAPSHOT_DEFAULTS = {
     { value: '2,481', label: 'API Calls', delta: '+12%', deltaDirection: 'up' as const },
     { value: '3', label: 'Incidents', delta: '-2', deltaDirection: 'up' as const },
   ],
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
@@ -604,11 +605,11 @@ export const NPS_RATING_DEFAULTS = {
 
 export const BENTO_GRID_DEFAULTS = {
   cells: [
-    { title: 'Ship faster', description: 'Automated deploy pipelines cut release time by 60%.', icon: '🚀', bgColor: '#18181b' },
-    { title: 'Zero downtime', description: 'Blue-green deployments with instant rollback.', icon: '⚡', bgColor: '#1c1a00' },
-    { title: 'Full visibility', description: 'Real-time logs, traces, and alerts in one place.', icon: '📊', bgColor: '#0a1a0a' },
+    { title: 'Ship faster', description: 'Automated deploy pipelines cut release time by 60%.', icon: '🚀', bgColor: '#f4f4f5' },
+    { title: 'Zero downtime', description: 'Blue-green deployments with instant rollback.', icon: '⚡', bgColor: '#f0f0f5' },
+    { title: 'Full visibility', description: 'Real-time logs, traces, and alerts in one place.', icon: '📊', bgColor: '#f0f5f0' },
   ],
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
@@ -620,7 +621,7 @@ export const FEATURE_ROW_DEFAULTS = {
   description: 'Automated testing, staging environments, and one-click rollback give your team the safety net to move fast.',
   ctaText: 'Learn more',
   ctaUrl: '#',
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
@@ -628,16 +629,16 @@ export const PULL_QUOTE_DEFAULTS = {
   quoteText: "'This is the most impactful release we've shipped in the last two years.'",
   authorName: 'Sarah Chen',
   authorTitle: 'VP of Engineering',
-  accentColor: '#f59e0b',
-  bgColor: '#09090b',
+  accentColor: '#18181b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
 export const ANNOUNCEMENT_BANNER_DEFAULTS = {
   icon: '📣',
   headline: 'Scheduled maintenance: Sunday, March 2 from 2-4 AM UTC',
-  bgColor: '#1c1a00',
-  textColor: '#f59e0b',
+  bgColor: '#fafafa',
+  textColor: '#18181b',
   isEmailMode: false,
 };
 
@@ -649,7 +650,7 @@ export const CARD_GRID_DEFAULTS = {
     { icon: '📈', title: 'Usage Analytics', description: 'Track team adoption and feature usage over time.' },
     { icon: '🛡️', title: 'Audit Logs', description: 'Full activity history for compliance and debugging.' },
   ],
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
@@ -661,7 +662,7 @@ export const COMPARISON_TABLE_DEFAULTS = {
     { label: 'Collaboration', values: ['yes', 'partial', 'yes'] },
     { label: 'Gmail-safe export', values: ['yes', 'yes', 'partial'] },
   ],
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
@@ -671,7 +672,7 @@ export const GIF_DEMO_DEFAULTS = {
   ctaText: 'Try it yourself',
   ctaUrl: '#',
   showOutlookWarning: true,
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
@@ -680,7 +681,7 @@ export const VIDEO_THUMBNAIL_DEFAULTS = {
   thumbnailUrl: 'https://placehold.co/520x293/18181b/f4f4f5?text=Video+Thumbnail',
   caption: 'Product walkthrough — 4 minutes',
   durationLabel: '4:12',
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
@@ -707,7 +708,7 @@ export const RSVP_DEFAULTS = {
   exportToken: undefined as string | undefined,
   blockId: 'rsvp',
   apiUrl: 'https://app.kore-email.com',
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
@@ -732,7 +733,7 @@ export const KNOWN_ISSUES_DEFAULTS = {
     { severity: 'p2' as const, title: 'Export CSV shows incorrect date format', status: 'in_progress' as const },
     { severity: 'p3' as const, title: 'Dark mode toggle resets on refresh', status: 'fixed' as const },
   ],
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
@@ -743,7 +744,7 @@ export const ROADMAP_PREVIEW_DEFAULTS = {
     { label: 'Salesforce integration', status: 'later' as const },
     { label: 'Mobile app (iOS + Android)', status: 'later' as const },
   ],
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
@@ -754,7 +755,7 @@ export const TEAM_ATTRIBUTION_DEFAULTS = {
     { name: 'James Liu', role: 'Product Design' },
     { name: 'Anika Osei', role: 'Backend Engineering' },
   ],
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
@@ -770,7 +771,7 @@ export const INCIDENT_RETRO_DEFAULTS = {
     'Require load test in staging before next deploy',
     'Update runbook with rollback procedure',
   ],
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   isEmailMode: false,
 };
 
@@ -783,7 +784,7 @@ export const HERO_DEFAULTS = {
   ctaText: "See what's new",
   ctaUrl: '#',
   showCta: true,
-  bgColor: '#09090b',
+  bgColor: '#ffffff',
   textColor: '#f4f4f5',
   displaySize: 56,
 };

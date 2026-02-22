@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -6,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Switch } from './ui/switch';
 import { ScrollArea } from './ui/scroll-area';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
-import { Plus, Trash2, X, Sparkles, Type, Layout, Settings, Palette } from 'lucide-react';
+import { Plus, Trash2, X, Sparkles, Type, Layout, Settings, Palette, Image, List, Code, Video, Columns, Grid3X3, BarChart3, Layers, AlertTriangle, Clock, FileText, Minus, Megaphone, Box, ChevronDown } from 'lucide-react';
 import { Separator } from './ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import { motion } from 'motion/react';
@@ -152,6 +153,119 @@ interface PropertiesPanelProps {
   globalDefaultTheme?: string;
 }
 
+interface Tier2Field<T> {
+  key: keyof T;
+  label: string;
+  type?: 'text' | 'textarea' | 'select';
+  options?: { value: string; label: string }[];
+}
+
+function Tier2ArrayEditor<T extends Record<string, unknown>>({
+  items,
+  onItemsChange,
+  fields,
+  defaultItem,
+}: {
+  items: T[];
+  onItemsChange: (items: T[]) => void;
+  fields: Tier2Field<T>[];
+  defaultItem: T;
+}) {
+  const [collapsed, setCollapsed] = useState<Record<number, boolean>>({});
+
+  const toggleCollapsed = (index: number) => {
+    setCollapsed((prev) => ({ ...prev, [index]: !prev[index] }));
+  };
+
+  const updateItem = (index: number, key: keyof T, value: unknown) => {
+    const updated = items.map((item, i) => (i === index ? { ...item, [key]: value } : item));
+    onItemsChange(updated);
+  };
+
+  const removeItem = (index: number) => {
+    onItemsChange(items.filter((_, i) => i !== index));
+  };
+
+  const addItem = () => {
+    onItemsChange([...items, { ...defaultItem }]);
+  };
+
+  return (
+    <div className="space-y-1">
+      {items.map((item, index) => {
+        const isCollapsed = collapsed[index] ?? false;
+        return (
+          <div key={index} className="border-b border-border/40 py-3">
+            <div className="flex items-center justify-between mb-2">
+              <button
+                type="button"
+                className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
+                onClick={() => toggleCollapsed(index)}
+              >
+                <ChevronDown className={`w-3 h-3 transition-transform ${isCollapsed ? '-rotate-90' : ''}`} />
+                <span>Item {index + 1}</span>
+              </button>
+              <button
+                type="button"
+                className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                onClick={() => removeItem(index)}
+                title="Remove item"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            {!isCollapsed && (
+              <div className="space-y-2 pl-1">
+                {fields.map((field) => {
+                  const val = item[field.key];
+                  if (field.type === 'select' && field.options) {
+                    return (
+                      <SelectControl
+                        key={String(field.key)}
+                        label={field.label}
+                        value={(val as string) || ''}
+                        onChange={(v) => updateItem(index, field.key, v)}
+                        options={field.options}
+                      />
+                    );
+                  }
+                  if (field.type === 'textarea') {
+                    return (
+                      <TextareaControl
+                        key={String(field.key)}
+                        label={field.label}
+                        value={(val as string) || ''}
+                        onChange={(v) => updateItem(index, field.key, v)}
+                      />
+                    );
+                  }
+                  return (
+                    <TextInputControl
+                      key={String(field.key)}
+                      label={field.label}
+                      value={(val as string) || ''}
+                      onChange={(v) => updateItem(index, field.key, v)}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={addItem}
+        className="w-full h-8 mt-2"
+      >
+        <Plus className="w-3.5 h-3.5 mr-1.5" />
+        Add Item
+      </Button>
+    </div>
+  );
+}
+
 export function PropertiesPanel({ 
   selectedId, 
   block, 
@@ -169,6 +283,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Header Properties"
+        icon={Layout}
         onClose={onClose}
       >
         <PropertySections blockType="header" defaultOpen={["content", "layout", "colors"]}>
@@ -403,6 +518,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Footer Properties"
+        icon={Layout}
         onClose={onClose}
       >
         <PropertySections blockType="footer" defaultOpen={["content", "layout", "colors"]}>
@@ -673,6 +789,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Divider"
+        icon={Minus}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["style", "layout", "colors"]}>
@@ -738,6 +855,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Text Block"
+        icon={Type}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
@@ -929,6 +1047,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Feature List"
+        icon={List}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
@@ -1158,6 +1277,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Feature with Screenshot"
+        icon={Image}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
@@ -1400,6 +1520,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Code Snippet"
+        icon={Code}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
@@ -1579,6 +1700,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Video Block"
+        icon={Video}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
@@ -1761,6 +1883,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Two Column"
+        icon={Columns}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
@@ -2041,6 +2164,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Item Grid"
+        icon={Grid3X3}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
@@ -2251,6 +2375,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Stats & Metrics"
+        icon={BarChart3}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
@@ -2429,6 +2554,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Multi-Update"
+        icon={Layers}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
@@ -2609,6 +2735,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Alert Block"
+        icon={AlertTriangle}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
@@ -2799,6 +2926,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Timeline"
+        icon={Clock}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["content", "layout", "colors"]}>
@@ -3004,6 +3132,7 @@ export function PropertiesPanel({
     return (
       <PropertyPanelContainer
         title="Image + Content"
+        icon={Image}
         onClose={onClose}
       >
         <PropertySections blockType={block.type} defaultOpen={["content", "image", "layout"]}>
@@ -3309,7 +3438,7 @@ export function PropertiesPanel({
     const currentTextColor = block.props.textColor ?? '#09090b';
     const currentTheme = block.props.theme as string | undefined;
     return (
-      <PropertyPanelContainer title={blockLabel} onClose={onClose}>
+      <PropertyPanelContainer title={blockLabel} icon={Box} onClose={onClose}>
         <PropertySections defaultOpen={['theme', 'colors']} blockType={block.type}>
           <SectionGroup label="Theme" showDivider={false}>
             <PropertySection id="theme" icon={Palette} title="Theme">
@@ -3359,11 +3488,546 @@ export function PropertiesPanel({
               />
             </PropertySection>
           </SectionGroup>
-          <SectionGroup label="Info">
-            <PropertySection id="info" icon={Settings} title="Block Settings">
-              <p className="text-xs text-muted-foreground px-6 py-4">
-                Detailed settings for this block coming soon.
-              </p>
+          <SectionGroup label="Content">
+            <PropertySection id="content" icon={Type} title="Content">
+              {/* Dynamic content editing based on block type */}
+              {block.props.headline !== undefined && (
+                <TextInputControl
+                  label="Headline"
+                  value={block.props.headline as string}
+                  onChange={(v) => t2UpdateProp('headline', v)}
+                />
+              )}
+              {block.props.questionText !== undefined && (
+                <TextInputControl
+                  label="Question"
+                  value={block.props.questionText as string}
+                  onChange={(v) => t2UpdateProp('questionText', v)}
+                />
+              )}
+              {block.props.version !== undefined && (
+                <TextInputControl
+                  label="Version"
+                  value={block.props.version as string}
+                  onChange={(v) => t2UpdateProp('version', v)}
+                />
+              )}
+              {block.props.featureName !== undefined && (
+                <TextInputControl
+                  label="Feature Name"
+                  value={block.props.featureName as string}
+                  onChange={(v) => t2UpdateProp('featureName', v)}
+                />
+              )}
+              {block.props.quoteText !== undefined && (
+                <TextareaControl
+                  label="Quote"
+                  value={block.props.quoteText as string}
+                  onChange={(v) => t2UpdateProp('quoteText', v)}
+                />
+              )}
+              {block.props.authorName !== undefined && (
+                <TextInputControl
+                  label="Author"
+                  value={block.props.authorName as string}
+                  onChange={(v) => t2UpdateProp('authorName', v)}
+                />
+              )}
+              {block.props.caption !== undefined && (
+                <TextInputControl
+                  label="Caption"
+                  value={block.props.caption as string}
+                  onChange={(v) => t2UpdateProp('caption', v)}
+                />
+              )}
+              {block.props.eventTitle !== undefined && (
+                <TextInputControl
+                  label="Event Title"
+                  value={block.props.eventTitle as string}
+                  onChange={(v) => t2UpdateProp('eventTitle', v)}
+                />
+              )}
+              {block.props.eventDate !== undefined && (
+                <TextInputControl
+                  label="Event Date"
+                  value={block.props.eventDate as string}
+                  onChange={(v) => t2UpdateProp('eventDate', v)}
+                />
+              )}
+              {block.props.incidentId !== undefined && (
+                <TextInputControl
+                  label="Incident ID"
+                  value={block.props.incidentId as string}
+                  onChange={(v) => t2UpdateProp('incidentId', v)}
+                />
+              )}
+              {block.props.impact !== undefined && (
+                <TextareaControl
+                  label="Impact"
+                  value={block.props.impact as string}
+                  onChange={(v) => t2UpdateProp('impact', v)}
+                />
+              )}
+              {block.props.ctaText !== undefined && (
+                <TextInputControl
+                  label="CTA Text"
+                  value={block.props.ctaText as string}
+                  onChange={(v) => t2UpdateProp('ctaText', v)}
+                />
+              )}
+              {block.props.ctaUrl !== undefined && (
+                <TextInputControl
+                  label="CTA URL"
+                  value={block.props.ctaUrl as string}
+                  onChange={(v) => t2UpdateProp('ctaUrl', v)}
+                />
+              )}
+              {block.props.lowLabel !== undefined && (
+                <TextInputControl
+                  label="Low Label"
+                  value={block.props.lowLabel as string}
+                  onChange={(v) => t2UpdateProp('lowLabel', v)}
+                />
+              )}
+              {block.props.highLabel !== undefined && (
+                <TextInputControl
+                  label="High Label"
+                  value={block.props.highLabel as string}
+                  onChange={(v) => t2UpdateProp('highLabel', v)}
+                />
+              )}
+              {block.props.deprecatedDate !== undefined && (
+                <TextInputControl
+                  label="Deprecated Date"
+                  value={block.props.deprecatedDate as string}
+                  onChange={(v) => t2UpdateProp('deprecatedDate', v)}
+                />
+              )}
+              {block.props.eolDate !== undefined && (
+                <TextInputControl
+                  label="End of Life Date"
+                  value={block.props.eolDate as string}
+                  onChange={(v) => t2UpdateProp('eolDate', v)}
+                />
+              )}
+              {block.props.migrationPath !== undefined && (
+                <TextareaControl
+                  label="Migration Path"
+                  value={block.props.migrationPath as string}
+                  onChange={(v) => t2UpdateProp('migrationPath', v)}
+                />
+              )}
+              {block.props.imageUrl !== undefined && (
+                <TextInputControl
+                  label="Image URL"
+                  value={block.props.imageUrl as string}
+                  onChange={(v) => t2UpdateProp('imageUrl', v)}
+                />
+              )}
+              {block.props.gifUrl !== undefined && (
+                <TextInputControl
+                  label="GIF URL"
+                  value={block.props.gifUrl as string}
+                  onChange={(v) => t2UpdateProp('gifUrl', v)}
+                />
+              )}
+              {block.props.videoUrl !== undefined && (
+                <TextInputControl
+                  label="Video URL"
+                  value={block.props.videoUrl as string}
+                  onChange={(v) => t2UpdateProp('videoUrl', v)}
+                />
+              )}
+              {block.props.thumbnailUrl !== undefined && (
+                <TextInputControl
+                  label="Thumbnail URL"
+                  value={block.props.thumbnailUrl as string}
+                  onChange={(v) => t2UpdateProp('thumbnailUrl', v)}
+                />
+              )}
+              {/* --- Missing scalar fields --- */}
+              {block.props.authorTitle !== undefined && (
+                <TextInputControl
+                  label="Author Title"
+                  value={block.props.authorTitle as string}
+                  onChange={(v) => t2UpdateProp('authorTitle', v)}
+                />
+              )}
+              {block.props.title !== undefined && block.type === 'feature-row' && (
+                <TextInputControl
+                  label="Title"
+                  value={block.props.title as string}
+                  onChange={(v) => t2UpdateProp('title', v)}
+                />
+              )}
+              {block.props.description !== undefined && block.type === 'feature-row' && (
+                <TextInputControl
+                  label="Description"
+                  value={block.props.description as string}
+                  onChange={(v) => t2UpdateProp('description', v)}
+                />
+              )}
+              {block.props.imageAlt !== undefined && (
+                <TextInputControl
+                  label="Image Alt"
+                  value={block.props.imageAlt as string}
+                  onChange={(v) => t2UpdateProp('imageAlt', v)}
+                />
+              )}
+              {block.props.imagePosition !== undefined && (
+                <SelectControl
+                  label="Image Position"
+                  value={block.props.imagePosition as string}
+                  onChange={(v) => t2UpdateProp('imagePosition', v)}
+                  options={[{value:'left',label:'Left'},{value:'right',label:'Right'}]}
+                />
+              )}
+              {block.props.icon !== undefined && block.type === 'announcement-banner' && (
+                <TextInputControl
+                  label="Icon"
+                  value={block.props.icon as string}
+                  onChange={(v) => t2UpdateProp('icon', v)}
+                />
+              )}
+              {block.props.durationLabel !== undefined && (
+                <TextInputControl
+                  label="Duration Label"
+                  value={block.props.durationLabel as string}
+                  onChange={(v) => t2UpdateProp('durationLabel', v)}
+                />
+              )}
+              {block.props.eventLocation !== undefined && (
+                <TextInputControl
+                  label="Event Location"
+                  value={block.props.eventLocation as string}
+                  onChange={(v) => t2UpdateProp('eventLocation', v)}
+                />
+              )}
+              {block.props.yesLabel !== undefined && (
+                <TextInputControl
+                  label="Yes Label"
+                  value={block.props.yesLabel as string}
+                  onChange={(v) => t2UpdateProp('yesLabel', v)}
+                />
+              )}
+              {block.props.noLabel !== undefined && (
+                <TextInputControl
+                  label="No Label"
+                  value={block.props.noLabel as string}
+                  onChange={(v) => t2UpdateProp('noLabel', v)}
+                />
+              )}
+              {block.props.date !== undefined && block.type === 'incident-retro' && (
+                <TextInputControl
+                  label="Date"
+                  value={block.props.date as string}
+                  onChange={(v) => t2UpdateProp('date', v)}
+                />
+              )}
+              {block.props.duration !== undefined && block.type === 'incident-retro' && (
+                <TextInputControl
+                  label="Duration"
+                  value={block.props.duration as string}
+                  onChange={(v) => t2UpdateProp('duration', v)}
+                />
+              )}
+              {block.props.rootCause !== undefined && (
+                <TextInputControl
+                  label="Root Cause"
+                  value={block.props.rootCause as string}
+                  onChange={(v) => t2UpdateProp('rootCause', v)}
+                />
+              )}
+              {block.props.fixApplied !== undefined && (
+                <TextareaControl
+                  label="Fix Applied"
+                  value={block.props.fixApplied as string}
+                  onChange={(v) => t2UpdateProp('fixApplied', v)}
+                />
+              )}
+
+              {/* --- Array editors --- */}
+
+              {/* changelog: sections array */}
+              {Array.isArray(block.props.sections) && (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-muted-foreground mb-2">Sections</div>
+                  {(block.props.sections as { type: string; items: string[] }[]).map((section, sIdx) => (
+                    <div key={sIdx} className="border-b border-border/40 py-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-semibold text-muted-foreground">Section {sIdx + 1}</span>
+                        <button
+                          type="button"
+                          className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                          onClick={() => {
+                            const updated = (block.props.sections as unknown[]).filter((_, i) => i !== sIdx);
+                            t2UpdateProp('sections', updated);
+                          }}
+                          title="Remove section"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <div className="space-y-2 pl-1">
+                        <SelectControl
+                          label="Type"
+                          value={section.type || 'feature'}
+                          onChange={(v) => {
+                            const updated = [...(block.props.sections as { type: string; items: string[] }[])];
+                            updated[sIdx] = { ...updated[sIdx], type: v };
+                            t2UpdateProp('sections', updated);
+                          }}
+                          options={[
+                            {value:'feature',label:'Feature'},
+                            {value:'fix',label:'Fix'},
+                            {value:'breaking',label:'Breaking'},
+                            {value:'deprecated',label:'Deprecated'},
+                            {value:'improvement',label:'Improvement'},
+                          ]}
+                        />
+                        <TextareaControl
+                          label="Items (one per line)"
+                          value={(section.items || []).join('\n')}
+                          onChange={(v) => {
+                            const updated = [...(block.props.sections as { type: string; items: string[] }[])];
+                            updated[sIdx] = { ...updated[sIdx], items: v.split('\n').filter(Boolean) };
+                            t2UpdateProp('sections', updated);
+                          }}
+                          rows={4}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const updated = [...(block.props.sections as unknown[]), { type: 'feature', items: [] }];
+                      t2UpdateProp('sections', updated);
+                    }}
+                    className="w-full h-8 mt-2"
+                  >
+                    <Plus className="w-3.5 h-3.5 mr-1.5" />
+                    Add Section
+                  </Button>
+                </div>
+              )}
+
+              {/* metrics-snapshot: metrics array */}
+              {Array.isArray(block.props.metrics) && (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-muted-foreground mb-2">Metrics</div>
+                  <Tier2ArrayEditor
+                    items={block.props.metrics as { value: string; label: string; delta: string; deltaDirection: string }[]}
+                    onItemsChange={(items) => t2UpdateProp('metrics', items)}
+                    fields={[
+                      {key:'value',label:'Value'},
+                      {key:'label',label:'Label'},
+                      {key:'delta',label:'Delta'},
+                      {key:'deltaDirection',label:'Direction',type:'select',options:[{value:'up',label:'Up'},{value:'down',label:'Down'},{value:'neutral',label:'Neutral'}]},
+                    ]}
+                    defaultItem={{value:'0',label:'Metric',delta:'',deltaDirection:'up'}}
+                  />
+                </div>
+              )}
+
+              {/* bento-grid: cells array */}
+              {Array.isArray(block.props.cells) && (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-muted-foreground mb-2">Cells</div>
+                  <Tier2ArrayEditor
+                    items={block.props.cells as { title: string; description: string; icon: string }[]}
+                    onItemsChange={(items) => t2UpdateProp('cells', items)}
+                    fields={[
+                      {key:'title',label:'Title'},
+                      {key:'description',label:'Description'},
+                      {key:'icon',label:'Icon'},
+                    ]}
+                    defaultItem={{title:'',description:'',icon:''}}
+                  />
+                </div>
+              )}
+
+              {/* card-grid: cards array */}
+              {Array.isArray(block.props.cards) && (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-muted-foreground mb-2">Cards</div>
+                  <Tier2ArrayEditor
+                    items={block.props.cards as { icon: string; title: string; description: string; link: string }[]}
+                    onItemsChange={(items) => t2UpdateProp('cards', items)}
+                    fields={[
+                      {key:'icon',label:'Icon'},
+                      {key:'title',label:'Title'},
+                      {key:'description',label:'Description'},
+                      {key:'link',label:'Link'},
+                    ]}
+                    defaultItem={{icon:'',title:'',description:'',link:''}}
+                  />
+                </div>
+              )}
+
+              {/* comparison-table: columns (string[]) + rows array */}
+              {Array.isArray(block.props.columns) && block.type === 'comparison-table' && (
+                <div className="mt-3">
+                  <TextInputControl
+                    label="Columns (comma-separated)"
+                    value={(block.props.columns as string[]).join(', ')}
+                    onChange={(v) => t2UpdateProp('columns', v.split(',').map((s: string) => s.trim()).filter(Boolean))}
+                  />
+                </div>
+              )}
+              {Array.isArray(block.props.rows) && block.type === 'comparison-table' && (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-muted-foreground mb-2">Rows</div>
+                  {(block.props.rows as { label: string; values: string[] }[]).map((row, rIdx) => (
+                    <div key={rIdx} className="border-b border-border/40 py-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-semibold text-muted-foreground">Row {rIdx + 1}</span>
+                        <button
+                          type="button"
+                          className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                          onClick={() => {
+                            const updated = (block.props.rows as unknown[]).filter((_, i) => i !== rIdx);
+                            t2UpdateProp('rows', updated);
+                          }}
+                          title="Remove row"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <div className="space-y-2 pl-1">
+                        <TextInputControl
+                          label="Label"
+                          value={row.label || ''}
+                          onChange={(v) => {
+                            const updated = [...(block.props.rows as { label: string; values: string[] }[])];
+                            updated[rIdx] = { ...updated[rIdx], label: v };
+                            t2UpdateProp('rows', updated);
+                          }}
+                        />
+                        <TextInputControl
+                          label="Values (comma-separated)"
+                          value={(row.values || []).join(', ')}
+                          onChange={(v) => {
+                            const updated = [...(block.props.rows as { label: string; values: string[] }[])];
+                            updated[rIdx] = { ...updated[rIdx], values: v.split(',').map((s: string) => s.trim()) };
+                            t2UpdateProp('rows', updated);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const colCount = Array.isArray(block.props.columns) ? (block.props.columns as string[]).length : 2;
+                      const updated = [...(block.props.rows as unknown[]), { label: '', values: Array(colCount).fill('') }];
+                      t2UpdateProp('rows', updated);
+                    }}
+                    className="w-full h-8 mt-2"
+                  >
+                    <Plus className="w-3.5 h-3.5 mr-1.5" />
+                    Add Row
+                  </Button>
+                </div>
+              )}
+
+              {/* quick-poll: options array */}
+              {Array.isArray(block.props.options) && block.type === 'quick-poll' && (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-muted-foreground mb-2">Options</div>
+                  <Tier2ArrayEditor
+                    items={block.props.options as { id: string; label: string }[]}
+                    onItemsChange={(items) => t2UpdateProp('options', items)}
+                    fields={[
+                      {key:'id',label:'ID'},
+                      {key:'label',label:'Label'},
+                    ]}
+                    defaultItem={{id:'',label:''}}
+                  />
+                </div>
+              )}
+
+              {/* feedback-prompt: options array */}
+              {Array.isArray(block.props.options) && block.type === 'feedback-prompt' && (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-muted-foreground mb-2">Options</div>
+                  <Tier2ArrayEditor
+                    items={block.props.options as { emoji: string; label: string; value: string }[]}
+                    onItemsChange={(items) => t2UpdateProp('options', items)}
+                    fields={[
+                      {key:'emoji',label:'Emoji'},
+                      {key:'label',label:'Label'},
+                      {key:'value',label:'Value'},
+                    ]}
+                    defaultItem={{emoji:'',label:'',value:''}}
+                  />
+                </div>
+              )}
+
+              {/* known-issues: issues array */}
+              {Array.isArray(block.props.issues) && (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-muted-foreground mb-2">Issues</div>
+                  <Tier2ArrayEditor
+                    items={block.props.issues as { severity: string; title: string; status: string }[]}
+                    onItemsChange={(items) => t2UpdateProp('issues', items)}
+                    fields={[
+                      {key:'severity',label:'Severity',type:'select',options:[{value:'p1',label:'P1'},{value:'p2',label:'P2'},{value:'p3',label:'P3'}]},
+                      {key:'title',label:'Title'},
+                      {key:'status',label:'Status',type:'select',options:[{value:'investigating',label:'Investigating'},{value:'in_progress',label:'In Progress'},{value:'fixed',label:'Fixed'}]},
+                    ]}
+                    defaultItem={{severity:'p2',title:'',status:'investigating'}}
+                  />
+                </div>
+              )}
+
+              {/* roadmap-preview: items array */}
+              {Array.isArray(block.props.items) && block.type === 'roadmap-preview' && (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-muted-foreground mb-2">Roadmap Items</div>
+                  <Tier2ArrayEditor
+                    items={block.props.items as { label: string; status: string; description: string }[]}
+                    onItemsChange={(items) => t2UpdateProp('items', items)}
+                    fields={[
+                      {key:'label',label:'Label'},
+                      {key:'status',label:'Status',type:'select',options:[{value:'now',label:'Now'},{value:'next',label:'Next'},{value:'later',label:'Later'}]},
+                      {key:'description',label:'Description'},
+                    ]}
+                    defaultItem={{label:'',status:'next',description:''}}
+                  />
+                </div>
+              )}
+
+              {/* team-attribution: members array */}
+              {Array.isArray(block.props.members) && (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-muted-foreground mb-2">Members</div>
+                  <Tier2ArrayEditor
+                    items={block.props.members as { name: string; role: string; avatarUrl: string }[]}
+                    onItemsChange={(items) => t2UpdateProp('members', items)}
+                    fields={[
+                      {key:'name',label:'Name'},
+                      {key:'role',label:'Role'},
+                      {key:'avatarUrl',label:'Avatar URL'},
+                    ]}
+                    defaultItem={{name:'',role:'',avatarUrl:''}}
+                  />
+                </div>
+              )}
+
+              {/* incident-retro: actionItems string array */}
+              {Array.isArray(block.props.actionItems) && (
+                <div className="mt-3">
+                  <TextareaControl
+                    label="Action Items (one per line)"
+                    value={(block.props.actionItems as string[]).join('\n')}
+                    onChange={(v) => t2UpdateProp('actionItems', v.split('\n').filter(Boolean))}
+                    rows={4}
+                  />
+                </div>
+              )}
             </PropertySection>
           </SectionGroup>
         </PropertySections>

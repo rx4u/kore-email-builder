@@ -86,8 +86,8 @@ export function VersionHistory({ emailId, currentBlocks, onRestore }: VersionHis
               disabled={saving || !label.trim()}
               style={{
                 padding: '6px 12px', borderRadius: '6px',
-                background: label.trim() ? '#f59e0b' : '#27272a',
-                color: label.trim() ? '#09090b' : '#71717a',
+                background: label.trim() ? '#18181b' : '#27272a',
+                color: label.trim() ? '#ffffff' : '#71717a',
                 border: 'none', cursor: label.trim() ? 'pointer' : 'not-allowed',
                 fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap',
               }}
@@ -119,7 +119,7 @@ export function VersionHistory({ emailId, currentBlocks, onRestore }: VersionHis
                   onClick={() => handleRestore(v.id)}
                   disabled={restoring === v.id}
                   style={{
-                    fontSize: '11px', color: '#f59e0b', background: 'none',
+                    fontSize: '11px', color: '#e4e4e7', background: 'none',
                     border: 'none', cursor: 'pointer', padding: '4px 8px',
                     borderRadius: '4px', fontWeight: 600,
                   }}

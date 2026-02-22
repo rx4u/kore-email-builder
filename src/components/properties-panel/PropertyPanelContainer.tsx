@@ -18,12 +18,14 @@ import { motion } from 'motion/react';
 import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
 import { PanelHeader } from '../ui/PanelHeader';
-import { X } from 'lucide-react';
+import { X, LucideIcon } from 'lucide-react';
 import { iconSizes, panelStandards } from '../../lib/design-tokens';
 import { panelVariants, springs, prefersReducedMotion } from '../../lib/motion-config';
 
 interface PropertyPanelContainerProps {
   title: string;
+  icon?: LucideIcon;
+  description?: string;
   onClose?: () => void;
   children: React.ReactNode;
   className?: string;
@@ -37,6 +39,8 @@ const reducedMotionPanel = {
 
 export const PropertyPanelContainer = React.memo(({
   title,
+  icon,
+  description,
   onClose,
   children,
   className = '',
@@ -52,6 +56,8 @@ export const PropertyPanelContainer = React.memo(({
     >
       <PanelHeader
         title={title}
+        icon={icon}
+        description={description}
         className="border-b"
         action={onClose ? (
           <Button
@@ -66,7 +72,7 @@ export const PropertyPanelContainer = React.memo(({
       />
 
       <ScrollArea className="flex-1 min-h-0">
-        <div className={`${panelStandards.contentPadding} pb-32`}>
+        <div className={`${panelStandards.contentPadding} pb-12`}>
           {children}
         </div>
       </ScrollArea>

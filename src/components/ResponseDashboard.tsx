@@ -26,7 +26,7 @@ function NpsSection({ responses }: { responses: Response[] }) {
             <div style={{
               width: '100%',
               height: `${(count / maxCount) * 48}px`,
-              background: i <= 6 ? '#ef4444' : i <= 8 ? '#f59e0b' : '#22c55e',
+              background: i <= 6 ? '#ef4444' : i <= 8 ? '#a1a1aa' : '#22c55e',
               borderRadius: '2px 2px 0 0',
               minHeight: count > 0 ? '4px' : '0',
             }} />
@@ -55,7 +55,7 @@ function PollSection({ responses }: { responses: Response[] }) {
             <span>{count} ({Math.round((count / total) * 100)}%)</span>
           </div>
           <div style={{ width: '100%', height: '8px', background: '#27272a', borderRadius: '4px' }}>
-            <div style={{ width: `${(count / total) * 100}%`, height: '100%', background: '#f59e0b', borderRadius: '4px', transition: 'width 0.3s' }} />
+            <div style={{ width: `${(count / total) * 100}%`, height: '100%', background: '#18181b', borderRadius: '4px', transition: 'width 0.3s' }} />
           </div>
         </div>
       ))}

@@ -92,8 +92,8 @@ export const HeroBlock = React.memo(function HeroBlock({
             style={{
               display: 'inline-block',
               padding: '14px 32px',
-              backgroundColor: '#f59e0b',
-              color: '#09090b',
+              backgroundColor: '#18181b',
+              color: '#ffffff',
               textDecoration: 'none',
               borderRadius: '8px',
               fontWeight: 700,

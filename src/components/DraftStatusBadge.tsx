@@ -3,7 +3,7 @@ import { updateDraftStatus } from '../lib/drafts';
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; color: string }> = {
   draft:     { label: 'Draft',     bg: '#27272a', color: '#a1a1aa' },
-  in_review: { label: 'In Review', bg: '#1c1a00', color: '#f59e0b' },
+  in_review: { label: 'In Review', bg: '#27272a', color: '#e4e4e7' },
   approved:  { label: 'Approved',  bg: '#052e16', color: '#22c55e' },
   sent:      { label: 'Sent',      bg: '#1c0a3a', color: '#a78bfa' },
 };

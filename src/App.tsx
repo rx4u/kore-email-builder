@@ -1093,7 +1093,7 @@ const DraggableBlockLibraryItem = React.memo(({ type, name, icon: IconComponent 
           ref={setNodeRef}
           {...attributes}
           {...listeners}
-          className="h-10 px-3 py-2 flex items-center gap-2 rounded-md cursor-grab active:cursor-grabbing border-l-2 border-transparent group hover:bg-muted/40 hover:border-l-amber-400/70 transition-all duration-150"
+          className="h-10 px-3 py-2 flex items-center gap-2 rounded-md cursor-grab active:cursor-grabbing border-l-2 border-transparent group hover:bg-muted/40 hover:border-l-foreground/20 transition-all duration-150"
           style={{ opacity: isDragging ? 0.5 : 1 }}
         >
           <IconComponent className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors duration-200 flex-shrink-0" />
@@ -1159,8 +1159,11 @@ const DropIndicator = React.memo(({ id, isOver }: { id: string; isOver: boolean 
     <div
       ref={setNodeRef}
       style={{
-        height: isOver ? '2px' : '4px',
-        margin: isOver ? '2px 0' : '2px 0',
+        height: isOver ? '32px' : '12px',
+        margin: '2px 0',
+        transition: 'height 150ms ease',
+        display: 'flex',
+        alignItems: 'center',
       }}
     >
       {isOver && <InsertionLine />}
@@ -1245,31 +1248,31 @@ const SortableBlock = React.memo(({
       data-block-id={block.id}
       onClick={onSelect}
       className={cn(
-        "group relative cursor-pointer border-0 overflow-hidden border-l-2 transition-all duration-150",
-        isSelected ? "ring-1 ring-amber-400/30 border-l-amber-500" : "border-l-transparent",
+        "group relative cursor-pointer border-0 overflow-hidden border-l-[3px] transition-all duration-150",
+        isSelected ? "ring-1 ring-primary/20 border-l-primary shadow-sm" : "border-l-transparent hover:border-l-muted-foreground/20",
         isDragging && "opacity-40 scale-[0.98]"
       )}
     >
       {/* Floating action bar — top-right, appears on hover */}
-      <div className="absolute top-0 right-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex items-center rounded-bl-lg rounded-tr-xl bg-background/95 backdrop-blur-sm border border-border/60 shadow-sm overflow-hidden">
+      <div className="absolute top-1.5 right-1.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex items-center gap-0.5 rounded-lg bg-background/95 backdrop-blur-sm border border-border shadow-md px-0.5 py-0.5">
         <button
           {...attributes}
           {...listeners}
-          className="flex items-center justify-center h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted/50 cursor-grab active:cursor-grabbing transition-colors"
+          className="flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted cursor-grab active:cursor-grabbing transition-colors"
           title="Drag to reorder"
           onClick={e => e.stopPropagation()}
         >
           <GripVertical className="h-4 w-4" />
         </button>
-        <div className="w-px h-4 bg-border/60" />
+        <div className="w-px h-5 bg-border" />
         <button
           type="button"
           aria-label="Remove block"
           onClick={(e) => { e.stopPropagation(); onRemove(); }}
-          className="flex items-center justify-center h-7 w-7 text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-colors"
+          className="flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
           title="Remove block"
         >
-          <Trash2 className="h-3.5 w-3.5" aria-hidden />
+          <Trash2 className="h-4 w-4" aria-hidden />
         </button>
       </div>
 
@@ -1280,12 +1283,14 @@ const SortableBlock = React.memo(({
         </div>
       </CardContent>
 
-      {/* Block type badge — bottom-left, visible only when selected */}
-      {isSelected && (
-        <div className="absolute bottom-0 left-0 rounded-tr-md bg-muted/80 text-[10px] text-muted-foreground px-2 py-0.5 font-mono">
-          {block.type}
-        </div>
-      )}
+      {/* Block type badge — bottom-left, visible on hover or selected */}
+      <div className={cn(
+        "absolute bottom-1.5 left-1.5 flex items-center gap-1.5 rounded-md bg-background/90 backdrop-blur-sm border border-border/60 text-xs text-muted-foreground px-2.5 py-1 font-medium shadow-sm transition-opacity duration-150",
+        isSelected ? "opacity-100" : "opacity-0 group-hover:opacity-70"
+      )}>
+        <IconComponent className="w-3 h-3" />
+        {name}
+      </div>
     </Card>
   );
 }, (prevProps, nextProps) => {
@@ -2417,7 +2422,7 @@ export default function App() {
       {/* Header — 2 rows */}
       <header className="border-b bg-card">
         {/* Row 1: Logo + Subject + Save + Share/Drafts/History + User Avatar */}
-        <div className="flex items-center px-4 h-[48px] border-b border-border/40">
+        <div className="flex items-center px-4 h-14 border-b border-border/40">
           <TopBar
             subject={emailState.header.title}
             onSubjectChange={(s) => setEmailState(prev => ({ ...prev, header: { ...prev.header, title: s } }))}
@@ -2431,19 +2436,19 @@ export default function App() {
         </div>
 
         {/* Row 2: Mode tabs + Template selector + Theme button */}
-        <div className="flex items-center justify-between px-6 h-9 bg-muted/20">
+        <div className="flex items-center justify-between px-4 h-10 bg-muted/30 border-t border-border/20">
           {/* Mode Toggle */}
           <Tabs value={mode} onValueChange={(v) => setMode(v as 'build' | 'preview' | 'code')}>
-            <TabsList className="h-7">
-              <TabsTrigger value="build" className="h-7 text-xs gap-1 px-3 data-[state=active]:ring-1 data-[state=active]:ring-border" title="Design and edit your email">
+            <TabsList className="h-8">
+              <TabsTrigger value="build" className="h-8 text-xs gap-1 px-3 data-[state=active]:ring-1 data-[state=active]:ring-border" title="Design and edit your email">
                 <Wrench className="w-3 h-3 shrink-0" />
                 Build
               </TabsTrigger>
-              <TabsTrigger value="preview" className="h-7 text-xs gap-1 px-3 data-[state=active]:ring-1 data-[state=active]:ring-border" title="See how your email will look">
+              <TabsTrigger value="preview" className="h-8 text-xs gap-1 px-3 data-[state=active]:ring-1 data-[state=active]:ring-border" title="See how your email will look">
                 <Eye className="w-3 h-3 shrink-0" />
                 Preview
               </TabsTrigger>
-              <TabsTrigger value="code" className="h-7 text-xs gap-1 px-3 data-[state=active]:ring-1 data-[state=active]:ring-border" title="View and copy the email HTML code">
+              <TabsTrigger value="code" className="h-8 text-xs gap-1 px-3 data-[state=active]:ring-1 data-[state=active]:ring-border" title="View and copy the email HTML code">
                 <Code className="w-3 h-3 shrink-0" />
                 HTML
               </TabsTrigger>
@@ -2459,7 +2464,7 @@ export default function App() {
                     value={currentTemplate in TEMPLATE_LABELS ? currentTemplate : 'custom'}
                     onValueChange={handleTemplateChange}
                   >
-                    <SelectTrigger className="h-7 w-40 text-xs border-border/60">
+                    <SelectTrigger className="h-8 w-40 text-xs border-border/60">
                       <SelectValue placeholder="Template" />
                     </SelectTrigger>
                     <SelectContent>
@@ -2483,7 +2488,7 @@ export default function App() {
                 <Button
                   variant={showThemePanel ? "default" : "outline"}
                   size="icon"
-                  className="h-7 w-7 transition-all hover:scale-105 active:scale-95"
+                  className="h-8 w-8 transition-all hover:scale-105 active:scale-95"
                   onClick={() => {
                     setShowThemePanel(!showThemePanel);
                     if (!showThemePanel && selectedBlockId) {

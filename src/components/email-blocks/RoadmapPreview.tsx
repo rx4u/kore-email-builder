@@ -11,6 +11,7 @@ export interface RoadmapItem {
 export interface RoadmapPreviewProps {
   items?: RoadmapItem[];
   bgColor?: string;
+  textColor?: string;
   isEmailMode?: boolean;
 }
 
@@ -43,11 +44,12 @@ export const RoadmapPreview = React.memo(function RoadmapPreview({
     { label: 'Mobile app (iOS + Android)', status: 'later' },
   ],
   bgColor = '#ffffff',
+  textColor,
   isEmailMode = false,
 }: RoadmapPreviewProps) {
   const dark = isDarkBg(bgColor);
   const STATUS_CONFIG = dark ? STATUS_DARK : STATUS_LIGHT;
-  const textPrimary = dark ? '#f4f4f5' : '#09090b';
+  const textPrimary = textColor || (dark ? '#f4f4f5' : '#09090b');
   const textMuted = dark ? '#71717a' : '#52525b';
 
   return (

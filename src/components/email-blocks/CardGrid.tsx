@@ -11,7 +11,17 @@ export interface CardGridProps {
   columns?: 2 | 3;
   cards?: Card[];
   bgColor?: string;
+  textColor?: string;
   isEmailMode?: boolean;
+}
+
+function isDarkBg(hex: string): boolean {
+  const h = hex.replace('#', '');
+  if (h.length < 6) return true;
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return (r * 299 + g * 587 + b * 114) / 1000 < 128;
 }
 
 export const CardGrid = React.memo(function CardGrid({
@@ -23,8 +33,15 @@ export const CardGrid = React.memo(function CardGrid({
     { icon: '🛡️', title: 'Audit Logs', description: 'Full activity history for compliance and debugging.' },
   ],
   bgColor = '#ffffff',
+  textColor,
   isEmailMode = false,
 }: CardGridProps) {
+  const dark = isDarkBg(bgColor);
+  const textPrimary = textColor || (dark ? '#f4f4f5' : '#09090b');
+  const textMuted = dark ? '#71717a' : '#52525b';
+  const cardBg = dark ? '#18181b' : '#f9f9f9';
+  const cardBorder = dark ? '#27272a' : '#e4e4e7';
+
   const rows: Card[][] = [];
   for (let i = 0; i < cards.length; i += columns) {
     rows.push(cards.slice(i, i + columns));
@@ -39,10 +56,10 @@ export const CardGrid = React.memo(function CardGrid({
             <tbody>
               <tr>
                 {row.map((card, ci) => (
-                  <td key={ci} width={cellWidth} style={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '10px', padding: '20px', verticalAlign: 'top', marginRight: ci < row.length - 1 ? '16px' : '0' }}>
+                  <td key={ci} width={cellWidth} style={{ backgroundColor: cardBg, border: `1px solid ${cardBorder}`, borderRadius: '10px', padding: '20px', verticalAlign: 'top', marginRight: ci < row.length - 1 ? '16px' : '0' }}>
                     {card.icon && <div style={{ fontSize: '24px', marginBottom: '10px' }}>{card.icon}</div>}
-                    <div style={{ color: '#f4f4f5', fontSize: '14px', fontWeight: 700, marginBottom: '6px' }}>{card.title}</div>
-                    <div style={{ color: '#71717a', fontSize: '13px', lineHeight: 1.6 }}>{card.description}</div>
+                    <div style={{ color: textPrimary, fontSize: '14px', fontWeight: 700, marginBottom: '6px' }}>{card.title}</div>
+                    <div style={{ color: textMuted, fontSize: '13px', lineHeight: 1.6 }}>{card.description}</div>
                   </td>
                 ))}
               </tr>

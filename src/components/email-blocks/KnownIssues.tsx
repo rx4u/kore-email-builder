@@ -14,6 +14,7 @@ export interface KnownIssuesProps {
   headline?: string;
   issues?: KnownIssue[];
   bgColor?: string;
+  textColor?: string;
   isEmailMode?: boolean;
 }
 
@@ -28,7 +29,7 @@ function isDarkBg(hex: string): boolean {
 
 const SEVERITY_DARK: Record<IssueSeverity, { label: string; color: string; bg: string }> = {
   p1: { label: 'P1', color: '#ef4444', bg: '#1c0a0a' },
-  p2: { label: 'P2', color: '#f59e0b', bg: '#1a1200' },
+  p2: { label: 'P2', color: '#d97706', bg: '#1a1200' },
   p3: { label: 'P3', color: '#3b82f6', bg: '#0a0a1c' },
 };
 
@@ -39,7 +40,7 @@ const SEVERITY_LIGHT: Record<IssueSeverity, { label: string; color: string; bg: 
 };
 
 const STATUS_CONFIG: Record<IssueStatus, { label: string; color: string }> = {
-  investigating: { label: 'Investigating', color: '#f59e0b' },
+  investigating: { label: 'Investigating', color: '#d97706' },
   in_progress:   { label: 'In Progress', color: '#3b82f6' },
   fixed:         { label: 'Fixed', color: '#22c55e' },
 };
@@ -52,11 +53,12 @@ export const KnownIssues = React.memo(function KnownIssues({
     { severity: 'p3', title: 'Dark mode toggle resets on refresh', status: 'fixed' },
   ],
   bgColor = '#ffffff',
+  textColor,
   isEmailMode = false,
 }: KnownIssuesProps) {
   const dark = isDarkBg(bgColor);
   const SEVERITY_CONFIG = dark ? SEVERITY_DARK : SEVERITY_LIGHT;
-  const textPrimary = dark ? '#f4f4f5' : '#09090b';
+  const textPrimary = textColor || (dark ? '#f4f4f5' : '#09090b');
   const textMuted = dark ? '#71717a' : '#52525b';
   const dividerColor = dark ? '#27272a' : '#e4e4e7';
 

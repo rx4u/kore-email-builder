@@ -3,10 +3,10 @@ export function InsertionLine() {
     <div
       className="insert-line"
       style={{
-        height: '3px',
-        background: '#f59e0b',
-        borderRadius: '2px',
-        margin: '0 16px',
+        height: '2px',
+        background: 'var(--foreground)',
+        borderRadius: '9999px',
+        margin: '0 8px',
         position: 'relative',
         pointerEvents: 'none',
       }}
@@ -14,12 +14,25 @@ export function InsertionLine() {
       <div
         style={{
           position: 'absolute',
-          left: '-6px',
-          top: '-4.5px',
-          width: '12px',
-          height: '12px',
+          left: '-5px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '10px',
+          height: '10px',
           borderRadius: '50%',
-          background: '#f59e0b',
+          background: 'var(--foreground)',
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          right: '-5px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '10px',
+          height: '10px',
+          borderRadius: '50%',
+          background: 'var(--foreground)',
         }}
       />
     </div>
