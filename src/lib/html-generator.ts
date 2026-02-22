@@ -144,8 +144,8 @@ function generateBlockHTML(block: any): string {
   // Support both flat block and { id, type, props } shape from app state
   const props = block.props != null ? { ...block.props, type: block.type } : block;
 
-  // Hero block manages its own <tr><td> structure with custom bgColor
-  if (block.type === 'hero') {
+  // These blocks manage their own <tr><td> structure with custom bgColor
+  if (['hero', 'changelog', 'deprecation', 'metrics-snapshot', 'nps-rating'].includes(block.type)) {
     return generateBlockContent(props);
   }
 
@@ -306,6 +306,104 @@ function generateBlockContent(block: any): string {
 </tr>`;
     }
     
+    case 'changelog': {
+      const { version = 'v2.1.0', date, sections = [], bgColor = '#09090b' } = block;
+      const typeConfig: Record<string, { color: string; label: string }> = {
+        feature:     { color: '#22c55e', label: 'New' },
+        improvement: { color: '#3b82f6', label: 'Improved' },
+        fix:         { color: '#f59e0b', label: 'Fixed' },
+        breaking:    { color: '#ef4444', label: 'Breaking' },
+        deprecated:  { color: '#a78bfa', label: 'Deprecated' },
+      };
+      const sectionsHTML = sections.map((section: any) => {
+        const cfg = typeConfig[section.type] || typeConfig.feature;
+        const items = (section.items || []).map((item: string) =>
+          `<li style="color:#a1a1aa;font-size:14px;line-height:1.7;margin-bottom:4px;">${item}</li>`
+        ).join('');
+        return `<div style="margin-bottom:20px;">
+  <div style="margin-bottom:8px;">
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${cfg.color};vertical-align:middle;margin-right:8px;"></span>
+    <span style="font-size:12px;font-weight:700;color:${cfg.color};text-transform:uppercase;letter-spacing:0.06em;">${cfg.label}</span>
+  </div>
+  <ul style="margin:0;padding:0 0 0 20px;list-style:disc;">${items}</ul>
+</div>`;
+      }).join('');
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:32px 40px;font-family:'DM Sans',Arial,sans-serif;">
+    <div style="margin-bottom:24px;">
+      <span style="display:inline-block;padding:4px 10px;border-radius:6px;background:#27272a;color:#f4f4f5;font-size:13px;font-weight:700;font-family:'DM Mono',monospace;">${version}</span>
+      ${date ? `<span style="color:#71717a;font-size:13px;margin-left:12px;">${date}</span>` : ''}
+    </div>
+    ${sectionsHTML}
+  </td>
+</tr>`;
+    }
+
+    case 'deprecation': {
+      const { featureName = 'Legacy Auth API v1', deprecatedDate = 'March 1, 2026', eolDate = 'June 1, 2026', migrationPath = '', severity = 'warning', ctaText = 'View Migration Guide', ctaUrl = '#' } = block;
+      const borderColor = severity === 'critical' ? '#ef4444' : '#f59e0b';
+      const innerBg = severity === 'critical' ? '#1c0a0a' : '#1a1200';
+      const badgeText = severity === 'critical' ? 'CRITICAL' : 'DEPRECATION NOTICE';
+      return `<tr>
+  <td style="padding:24px 40px;background-color:#09090b;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color:${innerBg};border:2px solid ${borderColor};border-radius:8px;">
+      <tr>
+        <td style="padding:24px 28px;font-family:'DM Sans',Arial,sans-serif;">
+          <div style="margin-bottom:16px;"><span style="display:inline-block;padding:3px 10px;border-radius:4px;background:${borderColor};color:#09090b;font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;">${badgeText}</span></div>
+          <div style="color:#f4f4f5;font-size:18px;font-weight:700;margin-bottom:16px;">${featureName}</div>
+          <table cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
+            <tr><td style="color:#71717a;font-size:13px;padding-bottom:8px;padding-right:24px;white-space:nowrap;">Deprecated:</td><td style="color:#f4f4f5;font-size:13px;font-weight:600;padding-bottom:8px;">${deprecatedDate}</td></tr>
+            <tr><td style="color:#71717a;font-size:13px;padding-right:24px;white-space:nowrap;">End of Life:</td><td style="color:${borderColor};font-size:13px;font-weight:700;">${eolDate}</td></tr>
+          </table>
+          <div style="color:#a1a1aa;font-size:14px;margin-bottom:20px;line-height:1.6;"><strong style="color:#f4f4f5;">Migration path: </strong>${migrationPath}</div>
+          ${ctaText ? `<a href="${ctaUrl}" style="display:inline-block;padding:10px 24px;background:${borderColor};color:#09090b;text-decoration:none;border-radius:6px;font-weight:700;font-size:14px;">${ctaText}</a>` : ''}
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>`;
+    }
+
+    case 'metrics-snapshot': {
+      const { headline, metrics = [], bgColor = '#09090b' } = block;
+      const deltaColor = (dir?: string) => dir === 'up' ? '#22c55e' : dir === 'down' ? '#ef4444' : '#71717a';
+      const deltaIcon = (dir?: string) => dir === 'up' ? '&#8593;' : dir === 'down' ? '&#8595;' : '&mdash;';
+      const cellsHTML = metrics.map((m: any, i: number) =>
+        `<td style="text-align:center;padding:0 16px;${i > 0 ? 'border-left:1px solid #27272a;' : ''}">
+  <div style="font-size:36px;font-weight:800;color:#f4f4f5;font-family:'DM Mono',monospace;line-height:1;">${m.value}</div>
+  ${m.delta ? `<div style="font-size:12px;color:${deltaColor(m.deltaDirection)};margin-top:4px;font-weight:600;">${deltaIcon(m.deltaDirection)} ${m.delta}</div>` : ''}
+  <div style="font-size:12px;color:#71717a;margin-top:6px;text-transform:uppercase;letter-spacing:0.06em;">${m.label}</div>
+</td>`
+      ).join('');
+      return `<tr>
+  <td bgcolor="${bgColor}" style="background-color:${bgColor};padding:32px 40px;font-family:'DM Sans',Arial,sans-serif;">
+    ${headline ? `<div style="color:#71717a;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px;">${headline}</div>` : ''}
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>${cellsHTML}</tr></table>
+  </td>
+</tr>`;
+    }
+
+    case 'nps-rating': {
+      const { questionText = 'How satisfied are you with this release?', lowLabel = 'Not at all', highLabel = 'Extremely satisfied', exportToken, blockId = 'nps', apiUrl = 'https://app.kore-email.com' } = block;
+      const npsColors = ['#ef4444','#f97316','#f97316','#fb923c','#fb923c','#eab308','#eab308','#84cc16','#84cc16','#22c55e','#22c55e'];
+      const cellsHTML = npsColors.map((color, i) => {
+        const href = exportToken ? `${apiUrl}/r/${exportToken}/${blockId}/${i}` : '#';
+        return `<td style="padding:0 2px;"><a href="${href}" style="display:inline-block;width:40px;height:40px;line-height:40px;text-align:center;background-color:${color};color:#fff;font-weight:700;font-size:14px;text-decoration:none;border-radius:6px;font-family:'DM Sans',Arial,sans-serif;">${i}</a></td>`;
+      }).join('');
+      return `<tr>
+  <td align="center" style="padding:32px 24px;background-color:#09090b;font-family:'DM Sans',Arial,sans-serif;">
+    <div style="color:#f4f4f5;font-size:16px;margin-bottom:20px;font-weight:500;">${questionText}</div>
+    <table cellpadding="0" cellspacing="0" style="margin:0 auto 8px;"><tr>${cellsHTML}</tr></table>
+    <table width="480" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+      <tr>
+        <td style="color:#71717a;font-size:11px;">${lowLabel}</td>
+        <td align="right" style="color:#71717a;font-size:11px;">${highLabel}</td>
+      </tr>
+    </table>
+  </td>
+</tr>`;
+    }
+
     default:
       return `<p style="margin: 0; color: #000000; font-size: 14px;">
         ${block.title || 'Content'}

@@ -124,6 +124,10 @@ import { Timeline } from "./components/email-blocks/Timeline";
 import { DividerBlock } from "./components/email-blocks/DividerBlock";
 import { ImageContentBlock } from "./components/email-blocks/ImageContentBlock";
 import { HeroBlock } from "./components/email-blocks/HeroBlock";
+import { ChangelogBlock } from "./components/email-blocks/ChangelogBlock";
+import { DeprecationBlock } from "./components/email-blocks/DeprecationBlock";
+import { MetricsBlock } from "./components/email-blocks/MetricsBlock";
+import { NpsBlock } from "./components/email-blocks/NpsBlock";
 
 
 // Email Template Wrapper – layout style (Copenhagen, New York, Oslo) controls radius and border
@@ -319,6 +323,30 @@ const contentBlockLibrary = [
     name: 'Hero',
     description: 'Large display hero with badge and CTA',
     icon: Zap
+  },
+  {
+    type: 'changelog' as ContentBlockType,
+    name: 'Changelog',
+    description: 'Categorized release changes with color-coded types',
+    icon: Clock
+  },
+  {
+    type: 'deprecation' as ContentBlockType,
+    name: 'Deprecation Notice',
+    description: 'EOL date, severity level, and migration path',
+    icon: AlertTriangle
+  },
+  {
+    type: 'metrics-snapshot' as ContentBlockType,
+    name: 'Metrics Snapshot',
+    description: 'Stat cards with delta indicators',
+    icon: BarChart3
+  },
+  {
+    type: 'nps-rating' as ContentBlockType,
+    name: 'NPS Rating',
+    description: '0-10 satisfaction scale with tokenized links',
+    icon: MessageSquare
   }
 ];
 
@@ -2102,6 +2130,14 @@ export default function App() {
         return <DividerBlock {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
       case 'hero':
         return <HeroBlock {...blockPropsWithTheme} isEmailMode={isEmailMode} />;
+      case 'changelog':
+        return <ChangelogBlock {...block.props} isEmailMode={isEmailMode} />;
+      case 'deprecation':
+        return <DeprecationBlock {...block.props} isEmailMode={isEmailMode} />;
+      case 'metrics-snapshot':
+        return <MetricsBlock {...block.props} isEmailMode={isEmailMode} />;
+      case 'nps-rating':
+        return <NpsBlock {...block.props} isEmailMode={isEmailMode} />;
       default:
         return null;
     }

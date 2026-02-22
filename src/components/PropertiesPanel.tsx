@@ -112,7 +112,11 @@ export type ContentBlockType =
   | 'timeline'
   | 'divider'
   | 'image-content'
-  | 'hero';
+  | 'hero'
+  | 'changelog'
+  | 'deprecation'
+  | 'metrics-snapshot'
+  | 'nps-rating';
 
 export interface ContentBlock {
   id: string;

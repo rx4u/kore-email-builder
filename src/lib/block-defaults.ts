@@ -556,6 +556,51 @@ export const DIVIDER_DEFAULTS = {
   isEmailMode: false,
 };
 
+export const CHANGELOG_DEFAULTS = {
+  version: 'v2.1.0',
+  date: '',
+  sections: [
+    { type: 'feature' as const, items: ['New dashboard overview page', 'Bulk export to CSV'] },
+    { type: 'fix' as const, items: ['Fixed broken pagination on mobile'] },
+    { type: 'breaking' as const, items: ['Removed legacy v1 API endpoints'] },
+  ],
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const DEPRECATION_DEFAULTS = {
+  featureName: 'Legacy Auth API v1',
+  deprecatedDate: 'March 1, 2026',
+  eolDate: 'June 1, 2026',
+  migrationPath: 'Migrate to Auth API v2. See migration guide for step-by-step instructions.',
+  severity: 'warning' as const,
+  ctaText: 'View Migration Guide',
+  ctaUrl: '#',
+  isEmailMode: false,
+};
+
+export const METRICS_SNAPSHOT_DEFAULTS = {
+  headline: 'This Sprint at a Glance',
+  metrics: [
+    { value: '98.7%', label: 'Uptime', delta: '+0.2%', deltaDirection: 'up' as const },
+    { value: '1.2s', label: 'Avg Response', delta: '-0.3s', deltaDirection: 'up' as const },
+    { value: '2,481', label: 'API Calls', delta: '+12%', deltaDirection: 'up' as const },
+    { value: '3', label: 'Incidents', delta: '-2', deltaDirection: 'up' as const },
+  ],
+  bgColor: '#09090b',
+  isEmailMode: false,
+};
+
+export const NPS_RATING_DEFAULTS = {
+  questionText: 'How satisfied are you with this release?',
+  lowLabel: 'Not at all',
+  highLabel: 'Extremely satisfied',
+  exportToken: undefined as string | undefined,
+  blockId: 'nps',
+  apiUrl: 'https://app.kore-email.com',
+  isEmailMode: false,
+};
+
 export const HERO_DEFAULTS = {
   badge: 'New Release',
   showBadge: true,
@@ -599,6 +644,10 @@ export const BLOCK_DEFAULTS = {
   'code-snippet': CODE_SNIPPET_DEFAULTS,
   divider: DIVIDER_DEFAULTS,
   hero: HERO_DEFAULTS,
+  changelog: CHANGELOG_DEFAULTS,
+  deprecation: DEPRECATION_DEFAULTS,
+  'metrics-snapshot': METRICS_SNAPSHOT_DEFAULTS,
+  'nps-rating': NPS_RATING_DEFAULTS,
 } as const;
 
 // ============================================================================
