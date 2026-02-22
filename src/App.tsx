@@ -2588,7 +2588,7 @@ export default function App() {
               >
                 {mode === 'code' ? (
                   <div className="max-w-4xl mx-auto w-full flex-1 min-h-0 h-0 flex flex-col overflow-hidden">
-                    <CodeViewer code={generatedEmailHTML} />
+                    <CodeViewer code={generatedEmailHTML} subject={emailState.header.title} />
                   </div>
                 ) : (
                 <>
