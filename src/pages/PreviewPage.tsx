@@ -6,7 +6,7 @@ import { generateEmailHTML } from '../lib/html-generator';
 interface Comment {
   id: string;
   author_name: string;
-  message: string;
+  content: string;
   created_at: string;
 }
 
@@ -18,6 +18,7 @@ export function PreviewPage() {
   const { token } = useParams<{ token: string }>();
   const [pageState, setPageState] = useState<PageState>('loading');
   const [html, setHtml] = useState('');
+  const [tokenId, setTokenId] = useState<string | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [authorName, setAuthorName] = useState('');
   const [message, setMessage] = useState('');
@@ -36,41 +37,61 @@ export function PreviewPage() {
         let emailHtml = data.html ?? '';
         if (!emailHtml && data.email?.blocks_jsonb) {
           const blocks = Array.isArray(data.email.blocks_jsonb) ? data.email.blocks_jsonb : [];
-          emailHtml = generateEmailHTML({ contentBlocks: blocks, headerConfig: {}, footerConfig: {} } as any, {});
+          // Use generateEmailHTML with a minimal default theme
+          const defaultTheme = { emailWidth: 600, fontFamily: 'DM Sans, sans-serif', backgroundColor: '#ffffff' };
+          emailHtml = generateEmailHTML(
+            { contentBlocks: blocks, headerConfig: {}, footerConfig: {}, subject: data.email.subject ?? '' } as any,
+            defaultTheme
+          );
         }
         setHtml(emailHtml);
+        // Look up the preview_token UUID so we can use it as token_id FK when inserting comments
+        if (data.token_id) {
+          setTokenId(data.token_id);
+        } else {
+          const { data: ptData } = await supabase
+            .from('preview_tokens')
+            .select('id')
+            .eq('token', token)
+            .single();
+          setTokenId(ptData?.id ?? null);
+        }
         setPageState('found');
       })
       .catch(() => setPageState('error'));
   }, [token]);
 
+  const fetchComments = async (tid: string) => {
+    const { data, error } = await supabase
+      .from('comments')
+      .select('id, author_name, content, created_at')
+      .eq('token_id', tid)
+      .order('created_at', { ascending: true });
+    if (!error) setComments(data ?? []);
+  };
+
   useEffect(() => {
-    if (pageState !== 'found' || !token) return;
-    supabase.from('comments')
-      .select('*')
-      .eq('token', token)
-      .order('created_at', { ascending: true })
-      .then(({ data }) => setComments(data ?? []));
-  }, [pageState, token]);
+    if (pageState !== 'found' || !tokenId) return;
+    fetchComments(tokenId);
+  }, [pageState, tokenId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!token || !message.trim()) return;
+    if (!tokenId || !message.trim()) return;
     setSubmitting(true);
     setSubmitError('');
+    setSubmitted(false);
     const { error } = await supabase.from('comments').insert({
-      token,
+      token_id: tokenId,
       author_name: authorName.trim() || 'Anonymous',
-      message: message.trim(),
+      content: message.trim(),
     });
     setSubmitting(false);
     if (error) { setSubmitError(error.message); return; }
     setSubmitted(true);
     setAuthorName('');
     setMessage('');
-    const { data } = await supabase.from('comments')
-      .select('*').eq('token', token).order('created_at', { ascending: true });
-    setComments(data ?? []);
+    await fetchComments(tokenId);
   };
 
   const containerStyle: React.CSSProperties = {
@@ -92,6 +113,7 @@ export function PreviewPage() {
   if (pageState === 'loading') {
     return (
       <div style={containerStyle}>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', marginTop: '80px' }}>
           <div style={{
             width: '32px', height: '32px',
@@ -102,7 +124,6 @@ export function PreviewPage() {
           }} />
           <p style={{ color: '#71717a', margin: 0, fontSize: '14px' }}>Loading preview...</p>
         </div>
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
@@ -170,7 +191,7 @@ export function PreviewPage() {
               background: '#fff',
             }}
             title="Email Preview"
-            sandbox="allow-same-origin"
+            sandbox="allow-popups allow-popups-to-escape-sandbox"
           />
         </div>
 
@@ -213,7 +234,6 @@ export function PreviewPage() {
               placeholder="Write a comment..."
               value={message}
               onChange={e => setMessage(e.target.value)}
-              required
               rows={3}
               style={{ ...inputStyle, resize: 'vertical', fontFamily: 'DM Sans, sans-serif' }}
             />
@@ -259,7 +279,7 @@ export function PreviewPage() {
                     </span>
                   </div>
                   <p style={{ margin: 0, fontSize: '13px', color: '#d4d4d8', lineHeight: 1.5 }}>
-                    {c.message}
+                    {c.content}
                   </p>
                 </div>
               ))}

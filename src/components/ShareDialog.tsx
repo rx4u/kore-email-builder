@@ -30,6 +30,8 @@ export function ShareDialog({ open, onClose, emailId }: ShareDialogProps) {
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {
+      setError('Could not copy to clipboard. Please copy the URL manually.');
     });
   };
 
