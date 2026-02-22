@@ -117,7 +117,7 @@ const TYPE_LABELS: Record<string, string> = {
 export function ResponseDashboard({ emailId, open, onClose }: ResponseDashboardProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [grouped, setGrouped] = useState<Record<string, any[]>>({});
+  const [grouped, setGrouped] = useState<Record<string, Response[]>>({});
 
   useEffect(() => {
     if (!open || !emailId) return;
