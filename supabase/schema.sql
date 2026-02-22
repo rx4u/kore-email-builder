@@ -22,10 +22,10 @@ create table public.workspace (
 -- Email drafts
 create table public.emails (
   id uuid primary key default uuid_generate_v4(),
-  workspace_id uuid references public.workspace(id) on delete cascade,
+  workspace_id uuid not null references public.workspace(id) on delete cascade,
   author_id uuid references public.users(id) on delete set null,
   subject text not null default 'Untitled Email',
-  blocks_jsonb jsonb not null default '{}',
+  blocks_jsonb jsonb not null default '[]',
   status text not null default 'draft' check (status in ('draft', 'in_review', 'approved', 'sent')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -85,6 +85,15 @@ create table public.comments (
   created_at timestamptz not null default now()
 );
 
+-- Indexes for FK columns (Supabase does not auto-index FKs)
+create index on public.emails(workspace_id);
+create index on public.emails(author_id);
+create index on public.email_versions(email_id);
+create index on public.responses(email_id);
+create index on public.preview_tokens(email_id);
+create index on public.comments(email_id);
+create index on public.templates(workspace_id);
+
 -- Auto-update updated_at on emails
 create or replace function update_updated_at()
 returns trigger as $$
@@ -106,6 +115,15 @@ alter table public.templates enable row level security;
 alter table public.responses enable row level security;
 alter table public.preview_tokens enable row level security;
 alter table public.comments enable row level security;
+alter table public.workspace enable row level security;
+
+create policy "Authenticated see workspace" on public.workspace
+  for select using (auth.role() = 'authenticated');
+
+create policy "Admins manage workspace" on public.workspace
+  for all using (
+    exists (select 1 from public.users where id = auth.uid() and role = 'admin')
+  );
 
 -- RLS Policies
 create policy "Users see own profile" on public.users
@@ -118,7 +136,9 @@ create policy "Authors manage own emails" on public.emails
   for all using (auth.uid() = author_id);
 
 create policy "Reviewers/admins update status" on public.emails
-  for update using (auth.role() = 'authenticated');
+  for update using (
+    exists (select 1 from public.users where id = auth.uid() and role in ('reviewer', 'admin'))
+  );
 
 create policy "Authenticated see versions" on public.email_versions
   for select using (auth.role() = 'authenticated');
