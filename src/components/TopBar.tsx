@@ -2,6 +2,17 @@ import { useState } from 'react';
 import { Share2, FileStack, History, Check, Clock } from 'lucide-react';
 import { ShareDialog } from './ShareDialog';
 
+const outlineButtonStyle: React.CSSProperties = {
+  display: 'flex', alignItems: 'center', gap: '6px',
+  padding: '6px 12px', borderRadius: '6px',
+  border: '1px solid #e4e4e7', background: 'transparent',
+  color: '#18181b', fontSize: '13px', fontWeight: 500,
+  cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
+  transition: 'background 0.15s',
+};
+const hoverIn = (e: React.MouseEvent<HTMLButtonElement>) => { e.currentTarget.style.background = '#f4f4f5'; };
+const hoverOut = (e: React.MouseEvent<HTMLButtonElement>) => { e.currentTarget.style.background = 'transparent'; };
+
 interface TopBarProps {
   subject: string;
   onSubjectChange: (s: string) => void;
@@ -78,16 +89,9 @@ export function TopBar({
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
           <button
             onClick={() => setShareOpen(true)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: '6px',
-              padding: '6px 12px', borderRadius: '6px',
-              border: '1px solid #e4e4e7', background: 'transparent',
-              color: '#18181b', fontSize: '13px', fontWeight: 500,
-              cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
-              transition: 'background 0.15s',
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#f4f4f5'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; }}
+            style={outlineButtonStyle}
+            onMouseEnter={hoverIn}
+            onMouseLeave={hoverOut}
             title="Share email"
           >
             <Share2 size={14} />
@@ -95,16 +99,9 @@ export function TopBar({
           </button>
           <button
             onClick={onShowDrafts}
-            style={{
-              display: 'flex', alignItems: 'center', gap: '6px',
-              padding: '6px 12px', borderRadius: '6px',
-              border: '1px solid #e4e4e7', background: 'transparent',
-              color: '#18181b', fontSize: '13px', fontWeight: 500,
-              cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
-              transition: 'background 0.15s',
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#f4f4f5'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; }}
+            style={outlineButtonStyle}
+            onMouseEnter={hoverIn}
+            onMouseLeave={hoverOut}
             title="Open drafts"
           >
             <FileStack size={14} />
@@ -113,16 +110,9 @@ export function TopBar({
           {onShowVersionHistory && (
             <button
               onClick={onShowVersionHistory}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '6px',
-                padding: '6px 12px', borderRadius: '6px',
-                border: '1px solid #e4e4e7', background: 'transparent',
-                color: '#18181b', fontSize: '13px', fontWeight: 500,
-                cursor: 'pointer', fontFamily: 'DM Sans, sans-serif',
-                transition: 'background 0.15s',
-              }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#f4f4f5'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; }}
+              style={outlineButtonStyle}
+              onMouseEnter={hoverIn}
+              onMouseLeave={hoverOut}
               title="Version history"
             >
               <History size={14} />

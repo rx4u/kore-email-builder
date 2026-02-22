@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X, BarChart3, Users, ThumbsUp, MessageSquare } from 'lucide-react';
-import { getResponses, groupByBlock } from '../lib/responses';
+import { getResponses, groupByBlock, type Response } from '../lib/responses';
 
 interface ResponseDashboardProps {
   emailId: string;
@@ -9,8 +9,8 @@ interface ResponseDashboardProps {
   onClose: () => void;
 }
 
-function NpsSection({ responses }: { responses: any[] }) {
-  const scores = responses.map((r) => Number(r.value ?? r.score ?? 0)).filter((n) => !isNaN(n));
+function NpsSection({ responses }: { responses: Response[] }) {
+  const scores = responses.map((r) => Number(r.value)).filter((n) => !isNaN(n));
   if (scores.length === 0) return <p style={{ color: '#71717a', fontSize: '13px' }}>No NPS responses yet.</p>;
   const avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
   const buckets = Array.from({ length: 11 }, (_, i) => scores.filter((s) => s === i).length);
@@ -38,10 +38,10 @@ function NpsSection({ responses }: { responses: any[] }) {
   );
 }
 
-function PollSection({ responses }: { responses: any[] }) {
+function PollSection({ responses }: { responses: Response[] }) {
   const counts: Record<string, number> = {};
   for (const r of responses) {
-    const opt = r.value ?? r.option ?? 'Unknown';
+    const opt = r.value || 'Unknown';
     counts[opt] = (counts[opt] ?? 0) + 1;
   }
   const total = responses.length;
@@ -63,9 +63,9 @@ function PollSection({ responses }: { responses: any[] }) {
   );
 }
 
-function RsvpSection({ responses }: { responses: any[] }) {
-  const yes = responses.filter((r) => (r.value ?? r.answer ?? '').toLowerCase() === 'yes').length;
-  const no = responses.filter((r) => (r.value ?? r.answer ?? '').toLowerCase() === 'no').length;
+function RsvpSection({ responses }: { responses: Response[] }) {
+  const yes = responses.filter((r) => r.value.toLowerCase() === 'yes').length;
+  const no = responses.filter((r) => r.value.toLowerCase() === 'no').length;
   if (responses.length === 0) return <p style={{ color: '#71717a', fontSize: '13px' }}>No RSVP responses yet.</p>;
   return (
     <div style={{ display: 'flex', gap: '32px' }}>
@@ -81,10 +81,10 @@ function RsvpSection({ responses }: { responses: any[] }) {
   );
 }
 
-function FeedbackSection({ responses }: { responses: any[] }) {
+function FeedbackSection({ responses }: { responses: Response[] }) {
   const counts: Record<string, number> = {};
   for (const r of responses) {
-    const emoji = r.value ?? r.emoji ?? '?';
+    const emoji = r.value || '?';
     counts[emoji] = (counts[emoji] ?? 0) + 1;
   }
   if (responses.length === 0) return <p style={{ color: '#71717a', fontSize: '13px' }}>No feedback responses yet.</p>;

@@ -28,6 +28,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { KoreLogo } from "./components/KoreLogo";
 import { BottomBar } from "./components/BottomBar";
 import { TopBar } from "./components/TopBar";
+import { PreviewToolbar } from "./components/PreviewToolbar";
 import { DragDotsIcon } from "./components/DragDotsIcon";
 import agentConfigImg from "figma:asset/49248dbd165caf7144a4cb6ade908b8d36ee2839.png";
 import { Copy, Check, Circle, Trash2, GripVertical, Image, List, FileText, RefreshCw, Grid3x3, AlertTriangle, MessageSquare, Code, Columns, Video, BarChart3, Clock, Minus, Mail, ChevronLeft, ChevronRight, PanelLeftClose, PanelRightClose, PanelLeft, PanelRight, Settings, Info, Wrench, Eye, Zap, LayoutGrid, ArrowLeftRight, Quote, Megaphone, Table, Clapperboard, Play, PieChart, Calendar, Star, Bug, Map, Users, AlertOctagon } from 'lucide-react';
@@ -2825,30 +2826,10 @@ export default function App() {
                         }}
                       >
                         {/* Preview mode toggles bar */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '12px 24px', borderBottom: '1px solid #e5e7eb', background: '#f9fafb', flexShrink: 0 }}>
-                          {(['desktop', 'mobile', 'dark'] as const).map((m) => (
-                            <button
-                              key={m}
-                              onClick={() => setPreviewMode(m)}
-                              style={{
-                                padding: '5px 14px',
-                                borderRadius: '6px',
-                                border: '1px solid',
-                                borderColor: previewMode === m ? '#18181b' : '#e5e7eb',
-                                background: previewMode === m ? '#18181b' : 'transparent',
-                                color: previewMode === m ? '#fff' : '#52525b',
-                                fontSize: '12px',
-                                fontWeight: 500,
-                                cursor: 'pointer',
-                                fontFamily: 'DM Mono, monospace',
-                                textTransform: 'capitalize',
-                                transition: 'all 0.15s',
-                              }}
-                            >
-                              {m === 'desktop' ? 'Desktop' : m === 'mobile' ? 'Mobile' : 'Dark'}
-                            </button>
-                          ))}
-                        </div>
+                        <PreviewToolbar
+                          previewMode={previewMode}
+                          onPreviewModeChange={setPreviewMode}
+                        />
                         <div style={{ flex: 1, padding: previewFrame.padding, boxSizing: 'border-box' }}>
                         <div
                           style={{
